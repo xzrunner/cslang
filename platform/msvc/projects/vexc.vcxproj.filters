@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\source\Parser.cpp">
+      <Filter>1.parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Tokenizer.cpp">
+      <Filter>0.lexer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\AST.cpp">
+      <Filter>1.parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\DumpAST.cpp">
+      <Filter>1.parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Type.cpp">
+      <Filter>2.semantic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\StringPool.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\StringHelper.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Declaration.cpp">
+      <Filter>1.parser\ast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Expression.cpp">
+      <Filter>1.parser\ast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Statement.cpp">
+      <Filter>1.parser\ast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\EvalAST.cpp">
+      <Filter>1.parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Variant.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\vexc\Parser.h">
+      <Filter>1.parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\Tokenizer.h">
+      <Filter>0.lexer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\keyword.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\Token.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\token_cfg.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\AST.h">
+      <Filter>1.parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\op_cfg.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\token_op_cfg.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\grammer.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\DumpAST.h">
+      <Filter>1.parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\Type.h">
+      <Filter>2.semantic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\StringPool.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\StringHelper.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\Declaration.h">
+      <Filter>1.parser\ast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\Expression.h">
+      <Filter>1.parser\ast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\Statement.h">
+      <Filter>1.parser\ast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\EvalAST.h">
+      <Filter>1.parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\Variant.h">
+      <Filter>util</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="util">
+      <UniqueIdentifier>{42e77e81-dbe2-4d2c-914f-516e32affb5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0.lexer">
+      <UniqueIdentifier>{98fa2459-9566-47dc-8309-fe613905caba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1.parser">
+      <UniqueIdentifier>{04e6df24-b5ed-4900-a407-e6d685779686}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2.semantic">
+      <UniqueIdentifier>{61ab5a51-b962-4598-9be5-de4552c8a49c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3.eval">
+      <UniqueIdentifier>{194378ee-e463-4ecf-bb5e-8aea9c50623d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1.parser\ast">
+      <UniqueIdentifier>{f97c30d1-716a-4c06-800f-cc8e2ead3c2e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,8 @@
+vexc/
+vexc_test/
+projects/*
+
+!projects/vexc.vcxproj
+!projects/vexc.vcxproj.filters
+!projects/vexc_test.vcxproj
+!projects/vexc_test.vcxproj.filters

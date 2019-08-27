@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\vexc\AST.h" />
+    <ClInclude Include="..\..\..\include\vexc\Declaration.h" />
+    <ClInclude Include="..\..\..\include\vexc\DumpAST.h" />
+    <ClInclude Include="..\..\..\include\vexc\EvalAST.h" />
+    <ClInclude Include="..\..\..\include\vexc\Expression.h" />
+    <ClInclude Include="..\..\..\include\vexc\grammer.h" />
+    <ClInclude Include="..\..\..\include\vexc\keyword.h" />
+    <ClInclude Include="..\..\..\include\vexc\op_cfg.h" />
+    <ClInclude Include="..\..\..\include\vexc\Parser.h" />
+    <ClInclude Include="..\..\..\include\vexc\Statement.h" />
+    <ClInclude Include="..\..\..\include\vexc\StringHelper.h" />
+    <ClInclude Include="..\..\..\include\vexc\StringPool.h" />
+    <ClInclude Include="..\..\..\include\vexc\Token.h" />
+    <ClInclude Include="..\..\..\include\vexc\token_cfg.h" />
+    <ClInclude Include="..\..\..\include\vexc\Tokenizer.h" />
+    <ClInclude Include="..\..\..\include\vexc\token_op_cfg.h" />
+    <ClInclude Include="..\..\..\include\vexc\Type.h" />
+    <ClInclude Include="..\..\..\include\vexc\Variant.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\source\AST.cpp" />
+    <ClCompile Include="..\..\..\source\Declaration.cpp" />
+    <ClCompile Include="..\..\..\source\DumpAST.cpp" />
+    <ClCompile Include="..\..\..\source\EvalAST.cpp" />
+    <ClCompile Include="..\..\..\source\Expression.cpp" />
+    <ClCompile Include="..\..\..\source\Parser.cpp" />
+    <ClCompile Include="..\..\..\source\Statement.cpp" />
+    <ClCompile Include="..\..\..\source\StringHelper.cpp" />
+    <ClCompile Include="..\..\..\source\StringPool.cpp" />
+    <ClCompile Include="..\..\..\source\Tokenizer.cpp" />
+    <ClCompile Include="..\..\..\source\Type.cpp" />
+    <ClCompile Include="..\..\..\source\Variant.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>1.vexc</ProjectName>
+    <ProjectGuid>{7BAD2F78-E25A-481E-87BD-D10CE3FC7586}</ProjectGuid>
+    <RootNamespace>vexc</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>15.0.26730.12</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\vexc\x86\Debug\</OutDir>
+    <IntDir>..\vexc\x86\Debug\obj\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\vexc\x86\Release\</OutDir>
+    <IntDir>..\vexc\x86\Release\obj\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\guard\include;..\..\..\..\lexer\include;</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\guard\include;..\..\..\..\lexer\include;</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
