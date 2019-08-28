@@ -8,9 +8,6 @@ namespace vexc
 Parser::Parser(const char* str)
     : m_tokenizer(str)
 {
-    // fixme
-    SetupTypeSystem();
-
     m_curr_token = m_tokenizer.NextToken();
 }
 
