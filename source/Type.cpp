@@ -42,7 +42,7 @@ namespace
 namespace vexc
 {
 
-Type WCharType = T(WCHAR);
+Type WCharType = Types[WCHAR];
 Type Types[VOID - CHAR + 1];
 
 /**
@@ -144,34 +144,34 @@ void SetupTypeSystem()
     int i;
     FunctionType fty;
 
-    T(CHAR).size = T(UCHAR).size = CHAR_SIZE;
-    T(SHORT).size = T(USHORT).size = SHORT_SIZE;
-    T(INT).size = T(UINT).size = INT_SIZE;
-    T(LONG).size = T(ULONG).size = LONG_SIZE;
-    T(LONGLONG).size = T(ULONGLONG).size = LONG_LONG_SIZE;
-    T(FLOAT).size = FLOAT_SIZE;
-    T(DOUBLE).size = DOUBLE_SIZE;
-    T(LONGDOUBLE).size = LONG_DOUBLE_SIZE;
-    T(POINTER).size = INT_SIZE;
+    Types[CHAR].size = Types[UCHAR].size = CHAR_SIZE;
+    Types[SHORT].size = Types[USHORT].size = SHORT_SIZE;
+    Types[INT].size = Types[UINT].size = INT_SIZE;
+    Types[LONG].size = Types[ULONG].size = LONG_SIZE;
+    Types[LONGLONG].size = Types[ULONGLONG].size = LONG_LONG_SIZE;
+    Types[FLOAT].size = FLOAT_SIZE;
+    Types[DOUBLE].size = DOUBLE_SIZE;
+    Types[LONGDOUBLE].size = LONG_DOUBLE_SIZE;
+    Types[POINTER].size = INT_SIZE;
 
     for (i = CHAR; i <= VOID; ++i)
     {
-        T(i).categ = i;
-        T(i).align = T(i).size;
+        Types[i].categ = i;
+        Types[i].align = Types[i].size;
     }
 
     //ALLOC(fty);
     //fty->categ = FUNCTION;
     //fty->qual = 0;
-    //fty->align = fty.size = T(POINTER).size;
-    //fty->bty = T(INT);
+    //fty->align = fty.size = Types[POINTER].size;
+    //fty->bty = Types[INT);
     //ALLOC(fty->sig);
     //CALLOC(fty->sig->params);
     //fty->sig->hasProto = 0;
     //fty->sig->hasEllipse = 0;
 
     //DefaultFunctionType = (Type)fty;
-    //WCharType = T(WCHAR);
+    //WCharType = Types[WCHAR);
 }
 
 }

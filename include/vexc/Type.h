@@ -33,8 +33,7 @@ struct FunctionType : public Type
     Signature sig;
 };
 
-//#define T(categ) (Types + categ)
-#define T(categ) (Types[categ])
+//#define T(categ) (Types[categ])
 
 Type Unqual(const Type& ty);
 Type ArrayOf(int len, Type ty);

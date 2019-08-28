@@ -147,7 +147,7 @@ ExprNodePtr ExpressionParser::ParsePrimaryExpression(Parser& parser)
             token_type++;
         }
 
-        expr->ty  = T(INT + token_type - TK_INTCONST);
+        expr->ty  = Types[INT + token_type - TK_INTCONST];
         expr->op  = OP_CONST;
         expr->val = parser.GetTokenizer().GetTokenVal();
         parser.NextToken();
@@ -159,7 +159,7 @@ ExprNodePtr ExpressionParser::ParsePrimaryExpression(Parser& parser)
 	case TK_WIDESTRING:
     {
         auto expr = std::make_shared<ExpressionNode>(parser.GetTokenizer(), NK_Expression);
-        expr->ty = ArrayOf(strlen((char*)(parser.GetTokenizer().GetTokenVal().p)) + 1, parser.CurrTokenType() == TK_STRING ? T(CHAR) : WCharType);
+        expr->ty = ArrayOf(strlen((char*)(parser.GetTokenizer().GetTokenVal().p)) + 1, parser.CurrTokenType() == TK_STRING ? Types[CHAR] : WCharType);
         expr->op = OP_STR;
         expr->val = parser.GetTokenizer().GetTokenVal();
         parser.NextToken();
