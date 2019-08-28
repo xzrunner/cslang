@@ -134,7 +134,7 @@ void DumpExpression(std::ostream& output, const ast::ExprNodePtr& expr, int pos)
 		pos += strlen(opname) + 2;
 		DumpExpression(output, expr->kids[0], pos);
 		LeftAlign(output, pos);
-//        output << (Field)expr->val.p)->id;
+        output << (char*)(expr->val.p);
 		break;
 
 	case OP_QUESTION:
@@ -160,7 +160,8 @@ void DumpExpression(std::ostream& output, const ast::ExprNodePtr& expr, int pos)
 
 	case OP_STR:
 		{
-			if (expr->ty.categ != CHAR) {
+            if (expr->ty.categ == ARRAY && expr->ty.b_categ != CHAR ||
+                expr->ty.categ != ARRAY && expr->ty.b_categ != CHAR) {
                 output << "L";
             }
 			output << "\"";

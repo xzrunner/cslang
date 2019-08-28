@@ -48,7 +48,8 @@ StmtNodePtr StatementParser::ParseCompoundStatement(Parser& parser)
         }
 		parser.SkipTo(FIRST_Statement);
 	}
-	parser.ExpectCurrToken(TK_RBRACE);
+	parser.Expect(TK_RBRACE);
+    parser.NextToken();
 
     ASTHelper::PostCheckTypedef();
 //	Level--;
@@ -67,7 +68,8 @@ StmtNodePtr StatementParser::ParseExpressionStatement(Parser& parser)
 	if (parser.CurrTokenType() != TK_SEMICOLON) {
         expr_stmt->expr = ExpressionParser::ParseExpression(parser);
 	}
-    parser.ExpectCurrToken(TK_SEMICOLON);
+    parser.Expect(TK_SEMICOLON);
+    parser.NextToken();
 
 	return expr_stmt;
 }
@@ -106,7 +108,8 @@ StmtNodePtr StatementParser::ParseCaseStatement(Parser& parser)
 
 	parser.NextToken();
 	case_stmt->expr = ExpressionParser::ParseConstantExpression(parser);
-	parser.ExpectCurrToken(TK_COLON);
+	parser.Expect(TK_COLON);
+    parser.NextToken();
 	case_stmt->stmt = ParseStatement(parser);
 
 	return case_stmt;
@@ -121,7 +124,8 @@ StmtNodePtr StatementParser::ParseDefaultStatement(Parser& parser)
     auto def_stmt = std::make_shared<DefaultStmtNode>(parser.GetTokenizer(), NK_DefaultStatement);
 
 	parser.NextToken();
-	parser.ExpectCurrToken(TK_COLON);
+	parser.Expect(TK_COLON);
+    parser.NextToken();
 	def_stmt->stmt = ParseStatement(parser);
 
 	return def_stmt;
@@ -137,9 +141,11 @@ StmtNodePtr StatementParser::ParseIfStatement(Parser& parser)
     auto if_stmt = std::make_shared<IfStmtNode>(parser.GetTokenizer(), NK_IfStatement);
 
 	parser.NextToken();
-	parser.ExpectCurrToken(TK_LPAREN);
+	parser.Expect(TK_LPAREN);
+    parser.NextToken();
 	if_stmt->expr = ExpressionParser::ParseExpression(parser);
-	parser.ExpectCurrToken(TK_RPAREN);
+	parser.Expect(TK_RPAREN);
+    parser.NextToken();
 	if_stmt->then_stmt = ParseStatement(parser);
 	if (parser.CurrTokenType() == TK_ELSE)
 	{
@@ -159,9 +165,11 @@ StmtNodePtr StatementParser::ParseSwitchStatement(Parser& parser)
     auto swtch_stmt = std::make_shared<SwitchStmtNode>(parser.GetTokenizer(), NK_SwitchStatement);
 
 	parser.NextToken();
-	parser.ExpectCurrToken(TK_LPAREN);
+	parser.Expect(TK_LPAREN);
+    parser.NextToken();
 	swtch_stmt->expr = ExpressionParser::ParseExpression(parser);
-	parser.ExpectCurrToken(TK_RPAREN);
+	parser.Expect(TK_RPAREN);
+    parser.NextToken();
 	swtch_stmt->stmt = ParseStatement(parser);
 
 	return swtch_stmt;
@@ -176,9 +184,11 @@ StmtNodePtr StatementParser::ParseWhileStatement(Parser& parser)
     auto while_stmt = std::make_shared<LoopStmtNode>(parser.GetTokenizer(), NK_WhileStatement);
 
 	parser.NextToken();
-	parser.ExpectCurrToken(TK_LPAREN);
+	parser.Expect(TK_LPAREN);
+    parser.NextToken();
 	while_stmt->expr = ExpressionParser::ParseExpression(parser);
-	parser.ExpectCurrToken(TK_RPAREN);
+	parser.Expect(TK_RPAREN);
+    parser.NextToken();
 	while_stmt->stmt = ParseStatement(parser);
 
 	return while_stmt;
@@ -194,11 +204,15 @@ StmtNodePtr StatementParser::ParseDoStatement(Parser& parser)
 
 	parser.NextToken();
 	do_stmt->stmt = ParseStatement(parser);
-	parser.ExpectCurrToken(TK_WHILE);
-	parser.ExpectCurrToken(TK_LPAREN);
+	parser.Expect(TK_WHILE);
+    parser.NextToken();
+	parser.Expect(TK_LPAREN);
+    parser.NextToken();
 	do_stmt->expr= ExpressionParser::ParseExpression(parser);
-	parser.ExpectCurrToken(TK_RPAREN);
-	parser.ExpectCurrToken(TK_SEMICOLON);
+	parser.Expect(TK_RPAREN);
+    parser.NextToken();
+	parser.Expect(TK_SEMICOLON);
+    parser.NextToken();
 
 	return do_stmt;
 }
@@ -212,22 +226,26 @@ StmtNodePtr StatementParser::ParseForStatement(Parser& parser)
     auto for_stmt = std::make_shared<ForStmtNode>(parser.GetTokenizer(), NK_ForStatement);
 
 	parser.NextToken();
-	parser.ExpectCurrToken(TK_LPAREN);
+	parser.Expect(TK_LPAREN);
+    parser.NextToken();
 	if (parser.CurrTokenType() != TK_SEMICOLON)
 	{
 		for_stmt->init_expr = ExpressionParser::ParseExpression(parser);
 	}
-	parser.ExpectCurrToken(TK_SEMICOLON);
+	parser.Expect(TK_SEMICOLON);
+    parser.NextToken();
 	if (parser.CurrTokenType() != TK_SEMICOLON)
 	{
 		for_stmt->expr = ExpressionParser::ParseExpression(parser);
 	}
-	parser.ExpectCurrToken(TK_SEMICOLON);
+	parser.Expect(TK_SEMICOLON);
+    parser.NextToken();
 	if (parser.CurrTokenType() != TK_RPAREN)
 	{
 		for_stmt->incr_expr = ExpressionParser::ParseExpression(parser);
 	}
-	parser.ExpectCurrToken(TK_RPAREN);
+	parser.Expect(TK_RPAREN);
+    parser.NextToken();
 	for_stmt->stmt = ParseStatement(parser);
 
 	return for_stmt;
@@ -242,7 +260,8 @@ StmtNodePtr StatementParser::ParseGotoStatement(Parser& parser)
 	{
 		goto_stmt->id = (char*)(parser.GetTokenizer().GetTokenVal().p);
 		parser.NextToken();
-		parser.ExpectCurrToken(TK_SEMICOLON);
+		parser.Expect(TK_SEMICOLON);
+        parser.NextToken();
 	}
 	else
 	{
@@ -264,7 +283,8 @@ StmtNodePtr StatementParser::ParseBreakStatement(Parser& parser)
     auto brk_stmt = std::make_shared<BreakStmtNode>(parser.GetTokenizer(), NK_BreakStatement);
 
 	parser.NextToken();
-	parser.ExpectCurrToken(TK_SEMICOLON);
+	parser.Expect(TK_SEMICOLON);
+    parser.NextToken();
 
 	return brk_stmt;
 }
@@ -278,7 +298,8 @@ StmtNodePtr StatementParser::ParseContinueStatement(Parser& parser)
     auto cont_stmt = std::make_shared<ContinueStmtNode>(parser.GetTokenizer(), NK_ContinueStatement);
 
 	parser.NextToken();
-	parser.ExpectCurrToken(TK_SEMICOLON);
+	parser.Expect(TK_SEMICOLON);
+    parser.NextToken();
 
 	return cont_stmt;
 }
@@ -296,7 +317,8 @@ StmtNodePtr StatementParser::ParseReturnStatement(Parser& parser)
 	{
 		ret_stmt->expr = ExpressionParser::ParseExpression(parser);
 	}
-	parser.ExpectCurrToken(TK_SEMICOLON);
+	parser.Expect(TK_SEMICOLON);
+    parser.NextToken();
 
 	return ret_stmt;
 }

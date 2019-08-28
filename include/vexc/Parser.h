@@ -23,7 +23,7 @@ public:
 
     void SkipTo(int toks[]);
 
-    void ExpectCurrToken(const TokenType mask);
+    void Expect(const TokenType mask);
 
 private:
     virtual std::map<TokenType, std::string> TokenNames() const {

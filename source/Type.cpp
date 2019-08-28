@@ -4,6 +4,15 @@
 #include <stdlib.h>
 #include <vadefs.h>
 
+#define CHAR_SIZE         1
+#define SHORT_SIZE        2
+#define INT_SIZE          4
+#define LONG_SIZE         4
+#define LONG_LONG_SIZE    4
+#define FLOAT_SIZE        4
+#define DOUBLE_SIZE       8
+#define LONG_DOUBLE_SIZE  8
+
 #ifdef _WIN32
 #define	WCHAR		USHORT
 #else
@@ -58,7 +67,7 @@ Type ArrayOf(int len, Type ty)
     aty.qual = 0;
     aty.size = len * ty.size;
     aty.align = ty.align;
-//    aty.bty = ty;
+    aty.b_categ = ty.categ;
 
     return (Type)aty;
 }
@@ -128,6 +137,41 @@ char* TypeToString(const Type& ty)
 	//}
 
     return nullptr;
+}
+
+void SetupTypeSystem()
+{
+    int i;
+    FunctionType fty;
+
+    T(CHAR).size = T(UCHAR).size = CHAR_SIZE;
+    T(SHORT).size = T(USHORT).size = SHORT_SIZE;
+    T(INT).size = T(UINT).size = INT_SIZE;
+    T(LONG).size = T(ULONG).size = LONG_SIZE;
+    T(LONGLONG).size = T(ULONGLONG).size = LONG_LONG_SIZE;
+    T(FLOAT).size = FLOAT_SIZE;
+    T(DOUBLE).size = DOUBLE_SIZE;
+    T(LONGDOUBLE).size = LONG_DOUBLE_SIZE;
+    T(POINTER).size = INT_SIZE;
+
+    for (i = CHAR; i <= VOID; ++i)
+    {
+        T(i).categ = i;
+        T(i).align = T(i).size;
+    }
+
+    //ALLOC(fty);
+    //fty->categ = FUNCTION;
+    //fty->qual = 0;
+    //fty->align = fty.size = T(POINTER).size;
+    //fty->bty = T(INT);
+    //ALLOC(fty->sig);
+    //CALLOC(fty->sig->params);
+    //fty->sig->hasProto = 0;
+    //fty->sig->hasEllipse = 0;
+
+    //DefaultFunctionType = (Type)fty;
+    //WCharType = T(WCHAR);
 }
 
 }

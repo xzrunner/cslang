@@ -5,6 +5,20 @@
 #define HIGH_3BIT(v)       ((v) >> (8 * sizeof(int) - 3) & 0x07)
 #define HIGH_1BIT(v)       ((v) >> (8 * sizeof(int) - 1) & 0x01)
 
+namespace
+{
+
+// todo: wide
+void AppendSTR(std::string& str, char* tmp, int len, int wide)
+{
+    for (int i = 0; i < len; ++i) {
+        str.push_back(tmp[i]);
+    }
+    str.push_back('\0');
+}
+
+}
+
 namespace vexc
 {
 
@@ -22,7 +36,7 @@ Tokenizer::Tokenizer(const char* str)
     InitScanners();
 }
 
-lexer::Tokenizer<TokenType>::Token 
+lexer::Tokenizer<TokenType>::Token
 Tokenizer::PeekToken()
 {
     auto old_val = m_token_val;
@@ -95,6 +109,8 @@ void Tokenizer::InitScanners()
     m_scanners['~'] = std::bind(&Tokenizer::ScanCOMP, this);
     m_scanners['?'] = std::bind(&Tokenizer::ScanQUESTION, this);
     m_scanners[':'] = std::bind(&Tokenizer::ScanCOLON, this);
+    m_scanners['@'] = std::bind(&Tokenizer::ScanIdentifier, this);
+    m_scanners['$'] = std::bind(&Tokenizer::ScanIdentifier, this);
 }
 
 TokenType Tokenizer::ScanIdentifier()
@@ -273,7 +289,7 @@ next_string:
 		len++;
 		if (len >= maxlen)
 		{
-            str += tmp;
+            AppendSTR(str, tmp, len, wide);
 			len = 0;
 		}
 	}
@@ -306,7 +322,7 @@ next_string:
 	}
 
 end_string:
-    str += tmp;
+    AppendSTR(str, tmp, len, wide);
     m_token_val.p = (void*)(m_str_pool.InsertAndQuery(str));
 
 	return wide ? TK_WIDESTRING : TK_STRING;
@@ -543,11 +559,11 @@ TokenType Tokenizer::ScanDot()
 	}
 }
 
-#define SINGLE_CHAR_SCANNER(t)   \
+#define SINGLE_CHAR_SCANNER(t) \
 TokenType Tokenizer::Scan##t() \
-{                                \
-    Advance();                   \
-    return TK_##t;               \
+{                              \
+    Advance();                 \
+    return TK_##t;             \
 }
 
 SINGLE_CHAR_SCANNER(LBRACE)
@@ -912,8 +928,9 @@ int Tokenizer::FindKeyword(const char* str, int len) const
     struct keyword *p = NULL;
     int index = 0;
 
-    if (*str != '_')
+    if (IsLetter(*str) && *str != '_') {
         index = ToUpper(*str) - 'A' + 1;
+    }
 
     p = keywords[index];
     while (p->name)

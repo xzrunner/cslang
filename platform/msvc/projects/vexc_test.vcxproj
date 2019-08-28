@@ -26,6 +26,7 @@
     <ClCompile Include="..\..\..\test\main.cpp" />
     <ClCompile Include="..\..\..\test\tokenizer_test.cpp" />
     <ClCompile Include="..\..\..\test\utility.cpp" />
+    <ClCompile Include="..\..\..\test\vex_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\test\utility.h" />

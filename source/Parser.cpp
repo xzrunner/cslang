@@ -1,5 +1,6 @@
 #include "vexc/Parser.h"
 #include "vexc/AST.h"
+#include "vexc/Type.h"
 
 namespace vexc
 {
@@ -7,6 +8,9 @@ namespace vexc
 Parser::Parser(const char* str)
     : m_tokenizer(str)
 {
+    // fixme
+    SetupTypeSystem();
+
     m_curr_token = m_tokenizer.NextToken();
 }
 
@@ -52,9 +56,9 @@ void Parser::SkipTo(int toks[])
 	}
 }
 
-void Parser::ExpectCurrToken(const TokenType mask)
+void Parser::Expect(const TokenType mask)
 {
-    Expect(mask, m_curr_token);
+    lexer::Parser<TokenType>::Expect(mask, m_curr_token);
 }
 
 }

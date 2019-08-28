@@ -1,5 +1,7 @@
 #include "vexc/EvalAST.h"
 
+#include <vector>
+
 #define EVAL_V0                          \
 auto v0 = EvalExpression(expr->kids[0]); \
 if (v0.type == VarType::NaN) {           \
@@ -205,7 +207,8 @@ Variant EvalExpression(const ast::ExprNodePtr& expr)
     }
     //case OP_SIZEOF:
     //case OP_INDEX:
-    //case OP_CALL:
+    case OP_CALL:
+        return EvalBuildInFunc(expr);
     //case OP_MEMBER:
     //case OP_PTR_MEMBER:
     case OP_POSTINC:
@@ -242,6 +245,47 @@ Variant EvalExpression(const ast::ExprNodePtr& expr)
         assert(0);
         return Variant(false);
     }
+}
+
+Variant EvalBuildInFunc(const ast::ExprNodePtr& expr)
+{
+    assert(expr->op == OP_CALL);
+
+    assert(expr->kids[0]->op == OP_ID);
+    std::string func_name = (char*)(expr->kids[0]->val.p);
+
+    std::vector<Variant> params;
+    ExprNodePtr p = expr->kids[1];
+    while (p) {
+        params.push_back(EvalExpression(p));
+        p = std::static_pointer_cast<ExpressionNode>(p->next);
+    }
+
+    if (func_name == "min")
+    {
+
+    }
+    else if (func_name == "min")
+    {
+
+    }
+    else if (func_name == "floor")
+    {
+        if (params.empty()) {
+            return Variant(false);
+        }
+
+        auto& p = params[0];
+        if (p.type == VarType::Float) {
+            return Variant(std::floor(p.f));
+        } else if (p.type == VarType::Double) {
+            return Variant(std::floor(p.d));
+        } else {
+            return p;
+        }
+    }
+
+    return Variant(false);
 }
 
 }

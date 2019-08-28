@@ -8,4 +8,6 @@ namespace vexc
 
 Variant EvalExpression(const ast::ExprNodePtr& expr);
 
+Variant EvalBuildInFunc(const ast::ExprNodePtr& expr);
+
 }

@@ -31,11 +31,11 @@
     <ClCompile Include="..\..\..\source\Statement.cpp">
       <Filter>1.parser\ast</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\EvalAST.cpp">
-      <Filter>1.parser</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\Variant.cpp">
       <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\EvalAST.cpp">
+      <Filter>3.eval</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -87,11 +87,11 @@
     <ClInclude Include="..\..\..\include\vexc\Statement.h">
       <Filter>1.parser\ast</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\vexc\EvalAST.h">
-      <Filter>1.parser</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\vexc\Variant.h">
       <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\EvalAST.h">
+      <Filter>3.eval</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

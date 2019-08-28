@@ -141,12 +141,13 @@ ExprNodePtr ExpressionParser::ParsePrimaryExpression(Parser& parser)
 	case TK_DOUBLECONST:
 	case TK_LDOUBLECONST:
     {
+        auto token_type = parser.CurrTokenType();
         auto expr = std::make_shared<ExpressionNode>(parser.GetTokenizer(), NK_Expression);
-        if (parser.CurrTokenType() >= TK_FLOATCONST) {
-            parser.NextToken();
+        if (token_type >= TK_FLOATCONST) {
+            token_type++;
         }
 
-        expr->ty  = T(INT + parser.CurrTokenType() - TK_INTCONST);
+        expr->ty  = T(INT + token_type - TK_INTCONST);
         expr->op  = OP_CONST;
         expr->val = parser.GetTokenizer().GetTokenVal();
         parser.NextToken();
@@ -170,7 +171,8 @@ ExprNodePtr ExpressionParser::ParsePrimaryExpression(Parser& parser)
     {
         parser.NextToken();
         auto expr = ParseExpression(parser);
-        parser.ExpectCurrToken(TK_RPAREN);
+        parser.Expect(TK_RPAREN);
+        parser.NextToken();
 
         return expr;
     }
@@ -208,7 +210,8 @@ ExprNodePtr ExpressionParser::ParsePostfixExpression(Parser& parser)
             p->kids[0] = expr;
             parser.NextToken();
             p->kids[1] = ParseExpression(parser);
-            parser.ExpectCurrToken(TK_RBRACKET);
+            parser.Expect(TK_RBRACKET);
+            parser.NextToken();
 
             expr = p;
         }
@@ -233,7 +236,8 @@ ExprNodePtr ExpressionParser::ParsePostfixExpression(Parser& parser)
                     tail = &(*tail)->next;
                 }
             }
-            parser.ExpectCurrToken(TK_RPAREN);
+            parser.Expect(TK_RPAREN);
+            parser.NextToken();
 
             expr = p;
         }
@@ -322,7 +326,9 @@ ExprNodePtr ExpressionParser::ParseUnaryExpression(Parser& parser)
             expr->op = OP_CAST;
             parser.NextToken();
 //            expr->kids[0] = (AstExpression)ParseTypeName();
-            parser.ExpectCurrToken(TK_RPAREN);
+            parser.Expect(TK_RPAREN);
+            parser.NextToken();
+
             expr->kids[1] = ParseUnaryExpression(parser);
 
             return expr;
@@ -346,7 +352,8 @@ ExprNodePtr ExpressionParser::ParseUnaryExpression(Parser& parser)
             {
                 parser.NextToken();
 //                expr->kids[0] = (AstExpression)ParseTypeName();
-                parser.ExpectCurrToken(TK_RPAREN);
+                parser.Expect(TK_RPAREN);
+                parser.NextToken();
             }
             else
             {
@@ -406,7 +413,8 @@ ExprNodePtr ExpressionParser::ParseConditionalExpression(Parser& parser)
         cond_expr->kids[1] = std::make_shared<ExpressionNode>(parser.GetTokenizer(), NK_Expression);
 		cond_expr->kids[1]->op = OP_COLON;
 		cond_expr->kids[1]->kids[0] = ParseExpression(parser);
-        parser.ExpectCurrToken(TK_COLON);
+        parser.Expect(TK_COLON);
+        parser.NextToken();
 		cond_expr->kids[1]->kids[1] = ParseConditionalExpression(parser);
 
 		return cond_expr;
