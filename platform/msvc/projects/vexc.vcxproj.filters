@@ -37,6 +37,9 @@
     <ClCompile Include="..\..\..\source\EvalAST.cpp">
       <Filter>3.eval</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\BuildInFuncs.cpp">
+      <Filter>3.eval</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\vexc\Parser.h">
@@ -91,6 +94,9 @@
       <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\vexc\EvalAST.h">
+      <Filter>3.eval</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\BuildInFuncs.h">
       <Filter>3.eval</Filter>
     </ClInclude>
   </ItemGroup>

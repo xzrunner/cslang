@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\vexc\AST.h" />
+    <ClInclude Include="..\..\..\include\vexc\BuildInFuncs.h" />
     <ClInclude Include="..\..\..\include\vexc\Declaration.h" />
     <ClInclude Include="..\..\..\include\vexc\DumpAST.h" />
     <ClInclude Include="..\..\..\include\vexc\EvalAST.h" />
@@ -32,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\AST.cpp" />
+    <ClCompile Include="..\..\..\source\BuildInFuncs.cpp" />
     <ClCompile Include="..\..\..\source\Declaration.cpp" />
     <ClCompile Include="..\..\..\source\DumpAST.cpp" />
     <ClCompile Include="..\..\..\source\EvalAST.cpp" />

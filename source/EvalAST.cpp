@@ -1,6 +1,7 @@
 #include "vexc/EvalAST.h"
 
 #include <vector>
+#include <map>
 
 #define EVAL_V0                          \
 auto v0 = EvalExpression(expr->kids[0]); \
@@ -14,12 +15,71 @@ if (v1.type == VarType::NaN) {           \
     return Variant(VarType::NaN);        \
 }
 
+namespace
+{
+
+using namespace vexc;
+using namespace vexc::ast;
+
+std::map<std::string, std::function<Variant(const std::vector<Variant>&)>> FUNCS;
+
+Variant EvalBuildInFunc(const ExprNodePtr& expr)
+{
+    assert(expr->op == OP_CALL);
+
+    assert(expr->kids[0]->op == OP_ID);
+    std::string func_name = (char*)(expr->kids[0]->val.p);
+
+    auto itr = FUNCS.find(func_name);
+    if (itr == FUNCS.end()) {
+        return Variant(false);
+    }
+
+    std::vector<Variant> params;
+    ExprNodePtr p = expr->kids[1];
+    while (p) {
+        params.push_back(EvalExpression(p));
+        p = std::static_pointer_cast<ExpressionNode>(p->next);
+    }
+    return itr->second(params);
+/*
+    if (func_name == "min")
+    {
+
+    }
+    else if (func_name == "min")
+    {
+
+    }
+    else if (func_name == "floor")
+    {
+        if (params.empty()) {
+            return Variant(false);
+        }
+
+        auto& p = params[0];
+        if (p.type == VarType::Float) {
+            return Variant(std::floor(p.f));
+        }
+        else if (p.type == VarType::Double) {
+            return Variant(std::floor(p.d));
+        }
+        else {
+            return p;
+        }
+    }
+
+    return Variant(false);*/
+}
+
+}
+
 namespace vexc
 {
 
 using namespace ast;
 
-Variant EvalExpression(const ast::ExprNodePtr& expr)
+Variant EvalExpression(const ExprNodePtr& expr)
 {
     switch (expr->op)
     {
@@ -247,45 +307,9 @@ Variant EvalExpression(const ast::ExprNodePtr& expr)
     }
 }
 
-Variant EvalBuildInFunc(const ast::ExprNodePtr& expr)
+void RegistBuildInFunc(const std::string& name, std::function<Variant(const std::vector<Variant>&)> func)
 {
-    assert(expr->op == OP_CALL);
-
-    assert(expr->kids[0]->op == OP_ID);
-    std::string func_name = (char*)(expr->kids[0]->val.p);
-
-    std::vector<Variant> params;
-    ExprNodePtr p = expr->kids[1];
-    while (p) {
-        params.push_back(EvalExpression(p));
-        p = std::static_pointer_cast<ExpressionNode>(p->next);
-    }
-
-    if (func_name == "min")
-    {
-
-    }
-    else if (func_name == "min")
-    {
-
-    }
-    else if (func_name == "floor")
-    {
-        if (params.empty()) {
-            return Variant(false);
-        }
-
-        auto& p = params[0];
-        if (p.type == VarType::Float) {
-            return Variant(std::floor(p.f));
-        } else if (p.type == VarType::Double) {
-            return Variant(std::floor(p.d));
-        } else {
-            return p;
-        }
-    }
-
-    return Variant(false);
+    FUNCS.insert({ name, func });
 }
 
 }
