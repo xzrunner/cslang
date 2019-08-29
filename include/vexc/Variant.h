@@ -10,6 +10,7 @@ enum class VarType
     Int,
     Float,
     Double,
+    String,
 };
 
 class Variant
@@ -20,6 +21,7 @@ public:
     explicit Variant(int  i);
     explicit Variant(float f);
     explicit Variant(double d);
+    explicit Variant(VarType type, void* p);
 
     bool   ToBool() const;
     int    ToInt() const;
@@ -34,6 +36,7 @@ public:
         int    i;
         float  f;
         double d;
+        void*  p;
     };
 
 }; // Variant

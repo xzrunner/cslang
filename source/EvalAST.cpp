@@ -299,7 +299,10 @@ Variant EvalExpression(const ExprNodePtr& expr)
             return Variant(expr->val.d);
         }
     }
-    //case OP_STR:
+    case OP_STR:
+    {
+        return Variant(VarType::String, expr->val.p);
+    }
     //case OP_NONE:
     default:
         assert(0);

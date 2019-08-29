@@ -20,4 +20,9 @@ const char* StringPool::InsertAndQuery(const std::string& str)
     }
 }
 
+std::string StringPool::VoidToString(const void* p)
+{
+    return std::string(static_cast<const char*>(p));
+}
+
 }

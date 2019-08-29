@@ -36,6 +36,12 @@ Variant::Variant(double d)
 {
 }
 
+Variant::Variant(VarType type, void* p)
+    : type(type)
+    , p(p)
+{
+}
+
 bool Variant::ToBool() const
 {
     switch (type)
