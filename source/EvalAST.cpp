@@ -42,34 +42,6 @@ Variant EvalBuildInFunc(const ExprNodePtr& expr)
         p = std::static_pointer_cast<ExpressionNode>(p->next);
     }
     return itr->second(params);
-/*
-    if (func_name == "min")
-    {
-
-    }
-    else if (func_name == "min")
-    {
-
-    }
-    else if (func_name == "floor")
-    {
-        if (params.empty()) {
-            return Variant(false);
-        }
-
-        auto& p = params[0];
-        if (p.type == VarType::Float) {
-            return Variant(std::floor(p.f));
-        }
-        else if (p.type == VarType::Double) {
-            return Variant(std::floor(p.d));
-        }
-        else {
-            return p;
-        }
-    }
-
-    return Variant(false);*/
 }
 
 }

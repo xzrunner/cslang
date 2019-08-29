@@ -14,8 +14,7 @@ const char* StringPool::InsertAndQuery(const std::string& str)
     if (itr == m_buf.end()) {
         auto itr = m_buf.insert(str);
         return itr.first->data();
-    }
-    else {
+    } else {
         return itr->data();
     }
 }
