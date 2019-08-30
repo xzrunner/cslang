@@ -1,4 +1,5 @@
 #include "vexc/EvalAST.h"
+#include "vexc/StringPool.h"
 
 #include <vector>
 #include <map>
@@ -241,7 +242,28 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
     //case OP_INDEX:
     case OP_CALL:
         return EvalBuildInFunc(expr, ud);
-    //case OP_MEMBER:
+    case OP_MEMBER:
+    {
+        EVAL_V0
+        assert(v0.type == VarType::String);
+        std::string var = StringPool::VoidToString(v0.p);
+        if (var.empty()) {
+            return Variant(false);
+        }
+        if (var[0] == '@' || var[0] == '$')
+        {
+            auto itr = FUNCS.find(var);
+            if (itr == FUNCS.end()) {
+                return Variant(false);
+            }
+
+            std::vector<Variant> params;
+            params.push_back(Variant(VarType::String, expr->val.p));
+            return itr->second(params, ud);
+        }
+
+        return Variant(false);
+    }
     //case OP_PTR_MEMBER:
     case OP_POSTINC:
     case OP_POSTDEC:
