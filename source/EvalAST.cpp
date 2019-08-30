@@ -21,7 +21,7 @@ namespace
 using namespace vexc;
 using namespace vexc::ast;
 
-std::map<std::string, std::function<Variant(const std::vector<Variant>&)>> FUNCS;
+std::map<std::string, BuildInFunc> FUNCS;
 
 Variant EvalBuildInFunc(const ExprNodePtr& expr)
 {
@@ -282,7 +282,7 @@ Variant EvalExpression(const ExprNodePtr& expr)
     }
 }
 
-void RegistBuildInFunc(const std::string& name, std::function<Variant(const std::vector<Variant>&)> func)
+void RegistBuildInFunc(const std::string& name, BuildInFunc func)
 {
     FUNCS.insert({ name, func });
 }
