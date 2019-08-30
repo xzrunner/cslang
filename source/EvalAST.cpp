@@ -276,8 +276,7 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
         } else if (strcmp(str, "false") == 0) {
             return Variant(false);
         } else {
-            assert(0);
-            return Variant(false);
+            return Variant(VarType::String, expr->val.p);
         }
     }
     case OP_CONST:
