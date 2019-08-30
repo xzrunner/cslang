@@ -3,16 +3,16 @@
 #include <vector>
 #include <map>
 
-#define EVAL_V0                          \
-auto v0 = EvalExpression(expr->kids[0]); \
-if (v0.type == VarType::NaN) {           \
-    return Variant(VarType::NaN);        \
+#define EVAL_V0                              \
+auto v0 = EvalExpression(expr->kids[0], ud); \
+if (v0.type == VarType::NaN) {               \
+    return Variant(VarType::NaN);            \
 }
 
-#define EVAL_V1                          \
-auto v1 = EvalExpression(expr->kids[1]); \
-if (v1.type == VarType::NaN) {           \
-    return Variant(VarType::NaN);        \
+#define EVAL_V1                              \
+auto v1 = EvalExpression(expr->kids[1], ud); \
+if (v1.type == VarType::NaN) {               \
+    return Variant(VarType::NaN);            \
 }
 
 namespace
@@ -23,7 +23,7 @@ using namespace vexc::ast;
 
 std::map<std::string, BuildInFunc> FUNCS;
 
-Variant EvalBuildInFunc(const ExprNodePtr& expr)
+Variant EvalBuildInFunc(const ExprNodePtr& expr, const void* ud)
 {
     assert(expr->op == OP_CALL);
 
@@ -38,10 +38,10 @@ Variant EvalBuildInFunc(const ExprNodePtr& expr)
     std::vector<Variant> params;
     ExprNodePtr p = expr->kids[1];
     while (p) {
-        params.push_back(EvalExpression(p));
+        params.push_back(EvalExpression(p, ud));
         p = std::static_pointer_cast<ExpressionNode>(p->next);
     }
-    return itr->second(params);
+    return itr->second(params, ud);
 }
 
 }
@@ -51,12 +51,12 @@ namespace vexc
 
 using namespace ast;
 
-Variant EvalExpression(const ExprNodePtr& expr)
+Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
 {
     switch (expr->op)
     {
     case OP_COMMA:
-        return EvalExpression(expr->kids[1]);
+        return EvalExpression(expr->kids[1], ud);
     case OP_ASSIGN:
     {
         EVAL_V1
@@ -211,7 +211,7 @@ Variant EvalExpression(const ExprNodePtr& expr)
     //case OP_ADDRESS:
     //case OP_DEREF:
     case OP_POS:
-        return EvalExpression(expr->kids[0]);
+        return EvalExpression(expr->kids[0], ud);
     case OP_NEG:
     {
         EVAL_V0
@@ -240,12 +240,12 @@ Variant EvalExpression(const ExprNodePtr& expr)
     //case OP_SIZEOF:
     //case OP_INDEX:
     case OP_CALL:
-        return EvalBuildInFunc(expr);
+        return EvalBuildInFunc(expr, ud);
     //case OP_MEMBER:
     //case OP_PTR_MEMBER:
     case OP_POSTINC:
     case OP_POSTDEC:
-        return EvalExpression(expr->kids[0]);
+        return EvalExpression(expr->kids[0], ud);
     case OP_ID:
     {
         auto str = (char*)(expr->val.p);

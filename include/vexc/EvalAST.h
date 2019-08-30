@@ -8,7 +8,7 @@
 namespace vexc
 {
 
-Variant EvalExpression(const ast::ExprNodePtr& expr);
+Variant EvalExpression(const ast::ExprNodePtr& expr, const void* ud = nullptr);
 
 using BuildInFunc = std::function<Variant(const std::vector<Variant>&, const void*)>;
 void RegistBuildInFunc(const std::string& name, BuildInFunc func);
