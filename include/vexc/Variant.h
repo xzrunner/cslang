@@ -11,6 +11,7 @@ enum class VarType
     Float,
     Double,
     String,
+    Float3,
 };
 
 class Variant

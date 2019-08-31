@@ -245,23 +245,44 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
     case OP_MEMBER:
     {
         EVAL_V0
-        assert(v0.type == VarType::String);
-        std::string var = StringPool::VoidToString(v0.p);
-        if (var.empty()) {
-            return Variant(false);
-        }
-        if (var[0] == '@' || var[0] == '$')
+        switch (v0.type)
         {
-            auto itr = FUNCS.find(var);
-            if (itr == FUNCS.end()) {
+        case VarType::String:
+        {
+            std::string var = StringPool::VoidToString(v0.p);
+            if (var.empty()) {
                 return Variant(false);
             }
+            if (var[0] == '@' || var[0] == '$')
+            {
+                auto itr = FUNCS.find(var);
+                if (itr == FUNCS.end()) {
+                    return Variant(false);
+                }
 
-            std::vector<Variant> params;
-            params.push_back(Variant(VarType::String, expr->val.p));
-            return itr->second(params, ud);
+                std::vector<Variant> params;
+                params.push_back(Variant(VarType::String, expr->val.p));
+                return itr->second(params, ud);
+            }
         }
-
+            break;
+        case VarType::Float3:
+        {
+            auto mem = static_cast<const char*>(expr->val.p);
+            auto f3 = static_cast<const float*>(v0.p);
+            if (mem[0] == 'x') {
+                return Variant(f3[0]);
+            } else if (mem[0] == 'y') {
+                return Variant(f3[1]);
+            } else if (mem[0] == 'z') {
+                return Variant(f3[2]);
+            } else {
+                assert(0);
+                return Variant(false);
+            }
+        }
+            break;
+        }
         return Variant(false);
     }
     //case OP_PTR_MEMBER:
