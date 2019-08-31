@@ -36,10 +36,20 @@ Variant::Variant(double d)
 {
 }
 
-Variant::Variant(VarType type, void* p)
+Variant::Variant(VarType type, const void* p)
     : type(type)
     , p(p)
 {
+}
+
+Variant::~Variant()
+{
+    switch (type)
+    {
+    case VarType::Float3:
+        delete[] static_cast<const float*>(p);
+        break;
+    }
 }
 
 bool Variant::ToBool() const
