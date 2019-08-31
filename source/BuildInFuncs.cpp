@@ -7,14 +7,14 @@ namespace vexc
 void SetupBuildInFuncs()
 {
     RegistBuildInFunc("min", [](const std::vector<Variant>& params, const void* ud)->Variant {
-        return Variant(false);
+        return Variant();
     });
     RegistBuildInFunc("max", [](const std::vector<Variant>& params, const void* ud)->Variant {
-        return Variant(false);
+        return Variant();
     });
     RegistBuildInFunc("floor", [](const std::vector<Variant>& params, const void* ud)->Variant {
         if (params.empty()) {
-            return Variant(false);
+            return Variant();
         }
 
         auto& p = params[0];

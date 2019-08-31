@@ -5,7 +5,8 @@ namespace vexc
 
 enum class VarType
 {
-    NaN,
+    Invalid = 0,
+
     Bool,
     Int,
     Float,
@@ -17,6 +18,7 @@ enum class VarType
 class Variant
 {
 public:
+    Variant() : type(VarType::Invalid) {}
     Variant(VarType type);
     explicit Variant(bool b);
     explicit Variant(int  i);
@@ -29,7 +31,7 @@ public:
     float  ToFloat() const;
     double ToDouble() const;
 
-    VarType type;
+    VarType type = VarType::Invalid;
 
     union
     {

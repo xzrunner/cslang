@@ -6,14 +6,14 @@
 
 #define EVAL_V0                              \
 auto v0 = EvalExpression(expr->kids[0], ud); \
-if (v0.type == VarType::NaN) {               \
-    return Variant(VarType::NaN);            \
+if (v0.type == VarType::Invalid) {           \
+    return Variant(VarType::Invalid);        \
 }
 
 #define EVAL_V1                              \
 auto v1 = EvalExpression(expr->kids[1], ud); \
-if (v1.type == VarType::NaN) {               \
-    return Variant(VarType::NaN);            \
+if (v1.type == VarType::Invalid) {           \
+    return Variant(VarType::Invalid);        \
 }
 
 namespace
@@ -33,7 +33,7 @@ Variant EvalBuildInFunc(const ExprNodePtr& expr, const void* ud)
 
     auto itr = FUNCS.find(func_name);
     if (itr == FUNCS.end()) {
-        return Variant(false);
+        return Variant();
     }
 
     std::vector<Variant> params;
@@ -170,7 +170,7 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
         EVAL_V1
         auto d1 = v1.ToDouble();
         if (abs(d1) < std::numeric_limits<double>::epsilon()) {
-            return Variant(VarType::NaN);
+            return Variant(VarType::Invalid);
         }
         if (v0.type == VarType::Double || v1.type == VarType::Double) {
             return Variant(v0.ToDouble() / v1.ToDouble());
@@ -187,7 +187,7 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
         if (v0.type == VarType::Int && v1.type == VarType::Int) {
             return Variant(v0.i % v1.i);
         } else {
-            return Variant(VarType::NaN);
+            return Variant(VarType::Invalid);
         }
     }
     //case OP_CAST:
@@ -197,7 +197,7 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
         if (v0.type == VarType::Int) {
             return Variant(++v0.i);
         } else {
-            return Variant(VarType::NaN);
+            return Variant(VarType::Invalid);
         }
     }
     case OP_PREDEC:
@@ -206,7 +206,7 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
         if (v0.type == VarType::Int) {
             return Variant(--v0.i);
         } else {
-            return Variant(VarType::NaN);
+            return Variant(VarType::Invalid);
         }
     }
     //case OP_ADDRESS:
@@ -218,8 +218,8 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
         EVAL_V0
         switch (v0.type)
         {
-        case VarType::NaN:
-            return Variant(VarType::NaN);
+        case VarType::Invalid:
+            return Variant(VarType::Invalid);
         case VarType::Bool:
             return Variant(!v0.b);
         case VarType::Int:
@@ -251,13 +251,13 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
         {
             std::string var = StringPool::VoidToString(v0.p);
             if (var.empty()) {
-                return Variant(false);
+                return Variant();
             }
             if (var[0] == '@' || var[0] == '$')
             {
                 auto itr = FUNCS.find(var);
                 if (itr == FUNCS.end()) {
-                    return Variant(false);
+                    return Variant();
                 }
 
                 std::vector<Variant> params;
@@ -278,12 +278,12 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
                 return Variant(f3[2]);
             } else {
                 assert(0);
-                return Variant(false);
+                return Variant();
             }
         }
             break;
         }
-        return Variant(false);
+        return Variant();
     }
     //case OP_PTR_MEMBER:
     case OP_POSTINC:
@@ -295,7 +295,7 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
         if (strcmp(str, "true") == 0) {
             return Variant(true);
         } else if (strcmp(str, "false") == 0) {
-            return Variant(false);
+            return Variant();
         } else {
             return Variant(VarType::String, expr->val.p);
         }
@@ -320,7 +320,7 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
     //case OP_NONE:
     default:
         assert(0);
-        return Variant(false);
+        return Variant();
     }
 }
 
