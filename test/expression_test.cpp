@@ -300,7 +300,7 @@ TEST_CASE("/")
         vexc::Parser parser("10 / 0");
         auto expr = vexc::ast::ExpressionParser::ParseExpression(parser);
         auto val = vexc::EvalExpression(expr);
-        REQUIRE(val.type == vexc::VarType::NaN);
+        REQUIRE(val.type == vexc::VarType::Invalid);
     }
 }
 
