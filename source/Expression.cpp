@@ -121,11 +121,26 @@ ExprNodePtr ExpressionParser::ParsePrimaryExpression(Parser& parser)
 {
 	switch (parser.CurrTokenType())
 	{
-	case TK_ID:
+    case TK_ID:
     {
         auto expr = std::make_shared<ExpressionNode>(parser.GetTokenizer(), NK_Expression);
         expr->op = OP_ID;
         expr->val = parser.GetTokenizer().GetTokenVal();
+        parser.NextToken();
+
+        return expr;
+    }
+
+    case TK_ATTR:
+    case TK_DESC:
+    {
+        auto kid = std::make_shared<ExpressionNode>(parser.GetTokenizer(), NK_Expression);
+        kid->op = OP_ID;
+        kid->val = parser.GetTokenizer().GetTokenVal();
+
+        auto expr = std::make_shared<ExpressionNode>(parser.GetTokenizer(), NK_Expression);
+        expr->op = OP_CALL;
+        expr->kids[0] = kid;
         parser.NextToken();
 
         return expr;

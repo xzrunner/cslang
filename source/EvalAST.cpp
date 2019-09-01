@@ -249,20 +249,12 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
         {
         case VarType::String:
         {
+            assert(0);
+            return Variant();
+
             std::string var = StringPool::VoidToString(v0.p);
             if (var.empty()) {
                 return Variant();
-            }
-            if (var[0] == '@' || var[0] == '$')
-            {
-                auto itr = FUNCS.find(var);
-                if (itr == FUNCS.end()) {
-                    return Variant();
-                }
-
-                std::vector<Variant> params;
-                params.push_back(Variant(VarType::String, expr->val.p));
-                return itr->second(params, ud);
             }
         }
             break;

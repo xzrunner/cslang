@@ -136,8 +136,14 @@ TokenType Tokenizer::ScanIdentifier()
 		Advance();
 	}
 
-	tok = FindKeyword(start, (int)(CurPos() - start));
-	if (tok == TK_ID) {
+    if (strncmp(start, TokenStrings[TK_ATTR], strlen(TokenStrings[TK_ATTR])) == 0) {
+        tok = TK_ATTR;
+    } else if (strncmp(start, TokenStrings[TK_DESC], strlen(TokenStrings[TK_DESC])) == 0) {
+        tok = TK_DESC;
+    } else {
+        tok = FindKeyword(start, (int)(CurPos() - start));
+    }
+	if (tok == TK_ID || tok == TK_ATTR || tok == TK_DESC) {
         m_token_val.p = (void*)(m_str_pool.InsertAndQuery(start, (int)(CurPos() - start)));
 	}
 

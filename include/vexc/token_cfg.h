@@ -105,4 +105,8 @@ TOKEN(TK_ELLIPSE,       "...")
 TOKEN(TK_POUND,         "#")
 TOKEN(TK_NEWLINE,       "\n")
 
+//vex
+TOKEN(TK_ATTR,          "@")
+TOKEN(TK_DESC,          "$")
+
 TOKEN(TK_END,           "EOF")
