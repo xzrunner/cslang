@@ -295,7 +295,7 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
         if (strcmp(str, "true") == 0) {
             return Variant(true);
         } else if (strcmp(str, "false") == 0) {
-            return Variant();
+            return Variant(false);
         } else {
             return Variant(VarType::String, expr->val.p);
         }
