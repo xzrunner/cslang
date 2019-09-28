@@ -316,6 +316,42 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
     }
 }
 
+void RunStatement(const ast::StmtNodePtr& stmt, const void* ud)
+{
+    switch (stmt->kind)
+    {
+    case NK_ExpressionStatement:
+        EvalExpression(std::static_pointer_cast<ExprStmtNode>(stmt)->expr, ud);
+        break;
+
+    case NK_IfStatement:
+    {
+        auto if_node = std::static_pointer_cast<IfStmtNode>(stmt);
+        auto cond = EvalExpression(if_node->expr, ud);
+        assert(cond.type == VarType::Bool);
+        if (cond.b) {
+            RunStatement(if_node->then_stmt, ud);
+        } else if (if_node->else_stmt) {
+            RunStatement(if_node->else_stmt, ud);
+        }
+    }
+        break;
+
+    case NK_CompoundStatement:
+    {
+        auto p = std::static_pointer_cast<CompoundStmtNode>(stmt)->stmts;
+        while (p) {
+            RunStatement(std::static_pointer_cast<StatementNode>(p), ud);
+            p = p->next;
+        }
+    }
+        break;
+
+    default:
+        assert(0);
+    }
+}
+
 void RegistBuildInFunc(const std::string& name, BuildInFunc func)
 {
     FUNCS.insert({ name, func });
