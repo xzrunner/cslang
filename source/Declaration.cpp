@@ -4,10 +4,11 @@
 
 namespace vexc
 {
-namespace ast
-{
 
 int FIRST_Declaration[] = { FIRST_DECLARATION, 0};
+
+namespace ast
+{
 
 bool DeclarationParser::IsTypeName(int tok)
 {
