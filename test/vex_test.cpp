@@ -47,9 +47,9 @@ TEST_CASE("attr")
     vexc::Parser parser(str);
     auto expr = vexc::ast::ExpressionParser::ParseExpression(parser);
 
-    std::stringstream ss;
-    vexc::DumpExpression(ss, expr, 0);
-    std::cout << ss.str() << std::endl;
+    //std::stringstream ss;
+    //vexc::DumpExpression(ss, expr, 0);
+    //std::cout << ss.str() << std::endl;
 }
 
 TEST_CASE("expr")
@@ -61,7 +61,7 @@ $SIZEX == $SIZEY
     vexc::Parser parser(str);
     auto expr = vexc::ast::ExpressionParser::ParseExpression(parser);
 
-    std::stringstream ss;
-    vexc::DumpExpression(ss, expr, 0);
-    std::cout << ss.str() << std::endl;
+    //std::stringstream ss;
+    //vexc::DumpExpression(ss, expr, 0);
+    //std::cout << ss.str() << std::endl;
 }

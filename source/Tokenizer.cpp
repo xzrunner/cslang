@@ -131,19 +131,13 @@ TokenType Tokenizer::ScanIdentifier()
 	}
 
     Advance();
-	while (IsLetterOrDigit(CurChar()))
+	while (CurChar() == '@' || IsLetterOrDigit(CurChar()))
 	{
 		Advance();
 	}
 
-    if (strncmp(start, TokenStrings[TK_ATTR], strlen(TokenStrings[TK_ATTR])) == 0) {
-        tok = TK_ATTR;
-    } else if (strncmp(start, TokenStrings[TK_DESC], strlen(TokenStrings[TK_DESC])) == 0) {
-        tok = TK_DESC;
-    } else {
-        tok = FindKeyword(start, (int)(CurPos() - start));
-    }
-	if (tok == TK_ID || tok == TK_ATTR || tok == TK_DESC) {
+    tok = FindKeyword(start, (int)(CurPos() - start));
+	if (tok == TK_ID) {
         m_token_val.p = (void*)(m_str_pool.InsertAndQuery(start, (int)(CurPos() - start)));
 	}
 

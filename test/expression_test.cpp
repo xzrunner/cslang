@@ -445,3 +445,17 @@ zz = max(1.1f, 2);
     //vexc::DumpExpression(ss, expr, 0);
     //std::cout << ss.str() << std::endl;
 }
+
+TEST_CASE("attr asign")
+{
+    auto str = R"(
+v@up=v@N;
+)";
+
+    vexc::Parser parser(str);
+    auto expr = vexc::ast::ExpressionParser::ParseExpression(parser);
+
+    std::stringstream ss;
+    vexc::DumpExpression(ss, expr, 0);
+    std::cout << ss.str() << std::endl;
+}
