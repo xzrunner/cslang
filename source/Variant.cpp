@@ -46,7 +46,8 @@ bool Variant::ToBool() const
 {
     switch (type)
     {
-
+    case VarType::Invalid:
+        return false;
     case VarType::Bool:
         return b;
     case VarType::Int:
