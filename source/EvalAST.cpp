@@ -24,6 +24,9 @@ using namespace vexc::ast;
 
 std::map<std::string, BuildInFunc> FUNCS;
 
+GetterFunc GETTER = nullptr;
+SetterFunc SETTER = nullptr;
+
 Variant EvalBuildInFunc(const ExprNodePtr& expr, const void* ud)
 {
     assert(expr->op == OP_CALL);
@@ -61,6 +64,14 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
     case OP_ASSIGN:
     {
         EVAL_V1
+        if (expr->kids[1]->op == OP_ID && GETTER) {
+            v1 = GETTER((char*)(expr->kids[1]->val.p), ud);
+        }
+
+        if (expr->kids[0]->op == OP_ID && SETTER) {
+            SETTER((char*)(expr->kids[0]->val.p), v1, ud);
+        }
+
         return Variant(v1.ToBool());
     }
     //case OP_BITOR_ASSIGN:
@@ -283,6 +294,13 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
         return EvalExpression(expr->kids[0], ud);
     case OP_ID:
     {
+        if (GETTER) {
+            auto var = GETTER((char*)(expr->val.p), ud);
+            if (var.type != VarType::Invalid) {
+                return var;
+            }
+        }
+
         auto str = (char*)(expr->val.p);
         if (strcmp(str, "true") == 0) {
             return Variant(true);
@@ -355,6 +373,16 @@ void RunStatement(const ast::StmtNodePtr& stmt, const void* ud)
 void RegistBuildInFunc(const std::string& name, BuildInFunc func)
 {
     FUNCS.insert({ name, func });
+}
+
+void RegistGetter(GetterFunc func)
+{
+    GETTER = func;
+}
+
+void RegistSetter(SetterFunc func)
+{
+    SETTER = func;
 }
 
 }
