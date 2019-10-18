@@ -42,16 +42,6 @@ Variant::Variant(VarType type, const void* p)
 {
 }
 
-Variant::~Variant()
-{
-    switch (type)
-    {
-    case VarType::Float3:
-        delete[] static_cast<const float*>(p);
-        break;
-    }
-}
-
 bool Variant::ToBool() const
 {
     switch (type)

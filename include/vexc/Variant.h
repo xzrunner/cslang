@@ -25,7 +25,6 @@ public:
     explicit Variant(float f);
     explicit Variant(double d);
     explicit Variant(VarType type, const void* p);
-    ~Variant();
 
     bool   ToBool() const;
     int    ToInt() const;
