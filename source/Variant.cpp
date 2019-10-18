@@ -54,6 +54,8 @@ bool Variant::ToBool() const
         return i != 0;
     case VarType::Float:
         return fabs(f) > std::numeric_limits<float>::epsilon();
+    case VarType::Float3:
+        return true;
     case VarType::Double:
         return fabs(d) > std::numeric_limits<double>::epsilon();
     default:
