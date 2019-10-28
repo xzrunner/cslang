@@ -41,7 +41,9 @@ private:
     TokenType ScanBadChar();
     TokenType ScanEOF();
     TokenType ScanCharLiteral();
-    TokenType ScanStringLiteral();
+    TokenType ScanStringLiteral(const char separator);
+    TokenType ScanStringLiteralDoubleQuotes();
+    TokenType ScanStringLiteralSingleQuotes();
     TokenType ScanPlus();
     TokenType ScanMinus();
     TokenType ScanStar();

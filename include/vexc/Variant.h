@@ -26,10 +26,10 @@ public:
     explicit Variant(double d);
     explicit Variant(VarType type, const void* p);
 
-    bool   ToBool() const;
-    int    ToInt() const;
-    float  ToFloat() const;
-    double ToDouble() const;
+    bool   ToBool(const void* ud) const;
+    int    ToInt(const void* ud) const;
+    float  ToFloat(const void* ud) const;
+    double ToDouble(const void* ud) const;
 
     VarType type = VarType::Invalid;
 

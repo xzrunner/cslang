@@ -84,7 +84,8 @@ void Tokenizer::InitScanners()
 
     m_scanners[END_OF_FILE] = std::bind(&Tokenizer::ScanEOF, this);
     m_scanners['\''] = std::bind(&Tokenizer::ScanCharLiteral, this);
-    m_scanners['"'] = std::bind(&Tokenizer::ScanStringLiteral, this);
+    m_scanners['"'] = std::bind(&Tokenizer::ScanStringLiteralDoubleQuotes, this);
+    m_scanners['`'] = std::bind(&Tokenizer::ScanStringLiteralSingleQuotes, this);
     m_scanners['+'] = std::bind(&Tokenizer::ScanPlus, this);
     m_scanners['-'] = std::bind(&Tokenizer::ScanMinus, this);
     m_scanners['*'] = std::bind(&Tokenizer::ScanStar, this);
@@ -126,8 +127,12 @@ TokenType Tokenizer::ScanIdentifier()
 		}
 		if (NextChar() == '"')
 		{
-			return ScanStringLiteral();
+			return ScanStringLiteralDoubleQuotes();
 		}
+        if (NextChar() == '`')
+        {
+            return ScanStringLiteralSingleQuotes();
+        }
 	}
 
     Advance();
@@ -251,8 +256,7 @@ TokenType Tokenizer::ScanCharLiteral()
 	return TK_INTCONST;
 }
 
-
-TokenType Tokenizer::ScanStringLiteral()
+TokenType Tokenizer::ScanStringLiteral(const char separator)
 {
 	char tmp[512];
 	char *cp = tmp;
@@ -272,7 +276,7 @@ TokenType Tokenizer::ScanStringLiteral()
     Advance();
 
 next_string:
-	while (CurChar() != '"')
+	while (CurChar() != separator)
 	{
 		if (CurChar() == '\n' || CurChar() == END_OF_FILE)
 			break;
@@ -294,7 +298,7 @@ next_string:
 		}
 	}
 
-	if (CurChar() != '"')
+	if (CurChar() != separator)
 	{
 //		Error(&TokenCoord, "Expect \"");
 		goto end_string;
@@ -302,7 +306,7 @@ next_string:
 
 	Advance();
 	SkipWhiteSpace();
-	if (CurChar() == '"')
+	if (CurChar() == separator)
 	{
 		if (wide == 1)
 		{
@@ -311,7 +315,7 @@ next_string:
 		Advance();
 		goto next_string;
 	}
-	else if (CurChar() == 'L' && NextChar() == '"')
+	else if (CurChar() == 'L' && NextChar() == separator)
 	{
 		if (wide == 0)
 		{
@@ -326,6 +330,16 @@ end_string:
     m_token_val.p = (void*)(m_str_pool.InsertAndQuery(str));
 
 	return wide ? TK_WIDESTRING : TK_STRING;
+}
+
+TokenType Tokenizer::ScanStringLiteralDoubleQuotes()
+{
+    return ScanStringLiteral('"');
+}
+
+TokenType Tokenizer::ScanStringLiteralSingleQuotes()
+{
+    return ScanStringLiteral('`');
 }
 
 TokenType Tokenizer::ScanPlus()
@@ -610,6 +624,7 @@ int Tokenizer::ScanEscapeChar(int wide)
 
 	case '\'':
 	case '"':
+    case '`':
 	case '\\':
 	case '\?':
 		return c;

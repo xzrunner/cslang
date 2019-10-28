@@ -72,7 +72,7 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
             SETTER((char*)(expr->kids[0]->val.p), v1, ud);
         }
 
-        return Variant(v1.ToBool());
+        return Variant(v1.ToBool(ud));
     }
     //case OP_BITOR_ASSIGN:
     //case OP_BITXOR_ASSIGN:
@@ -90,13 +90,13 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
     {
         EVAL_V0
         EVAL_V1
-        return Variant(v0.ToBool() || v1.ToBool());
+        return Variant(v0.ToBool(ud) || v1.ToBool(ud));
     }
     case OP_AND:
     {
         EVAL_V0
         EVAL_V1
-        return Variant(v0.ToBool() && v1.ToBool());
+        return Variant(v0.ToBool(ud) && v1.ToBool(ud));
     }
     //case OP_BITOR:
     //case OP_BITXOR:
@@ -105,37 +105,37 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
     {
         EVAL_V0
         EVAL_V1
-        return Variant(abs(v0.ToDouble() - v1.ToDouble()) < std::numeric_limits<double>::epsilon());
+        return Variant(abs(v0.ToDouble(ud) - v1.ToDouble(ud)) < std::numeric_limits<double>::epsilon());
     }
     case OP_UNEQUAL:
     {
         EVAL_V0
         EVAL_V1
-        return Variant(abs(v0.ToDouble() - v1.ToDouble()) >= std::numeric_limits<double>::epsilon());
+        return Variant(abs(v0.ToDouble(ud) - v1.ToDouble(ud)) >= std::numeric_limits<double>::epsilon());
     }
     case OP_GREAT:
     {
         EVAL_V0
         EVAL_V1
-        return Variant(v0.ToDouble() > v1.ToDouble());
+        return Variant(v0.ToDouble(ud) > v1.ToDouble(ud));
     }
     case OP_LESS:
     {
         EVAL_V0
         EVAL_V1
-        return Variant(v0.ToDouble() < v1.ToDouble());
+        return Variant(v0.ToDouble(ud) < v1.ToDouble(ud));
     }
-    case OP_GREAT_EQ:
+     case OP_GREAT_EQ:
     {
         EVAL_V0
         EVAL_V1
-        return Variant(v0.ToDouble() >= v1.ToDouble());
+        return Variant(v0.ToDouble(ud) >= v1.ToDouble(ud));
     }
     case OP_LESS_EQ:
     {
         EVAL_V0
         EVAL_V1
-        return Variant(v0.ToDouble() <= v1.ToDouble());
+        return Variant(v0.ToDouble(ud) <= v1.ToDouble(ud));
     }
     //case OP_LSHIFT:
     //case OP_RSHIFT:
@@ -144,11 +144,11 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
         EVAL_V0
         EVAL_V1
         if (v0.type == VarType::Double || v1.type == VarType::Double) {
-            return Variant(v0.ToDouble() + v1.ToDouble());
+            return Variant(v0.ToDouble(ud) + v1.ToDouble(ud));
         } else if (v0.type == VarType::Float || v1.type == VarType::Float) {
-            return Variant(v0.ToFloat() + v1.ToFloat());
+            return Variant(v0.ToFloat(ud) + v1.ToFloat(ud));
         } else {
-            return Variant(v0.ToInt() + v1.ToInt());
+            return Variant(v0.ToInt(ud) + v1.ToInt(ud));
         }
     }
     case OP_SUB:
@@ -156,11 +156,11 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
         EVAL_V0
         EVAL_V1
         if (v0.type == VarType::Double || v1.type == VarType::Double) {
-            return Variant(v0.ToDouble() - v1.ToDouble());
+            return Variant(v0.ToDouble(ud) - v1.ToDouble(ud));
         } else if (v0.type == VarType::Float || v1.type == VarType::Float) {
-            return Variant(v0.ToFloat() - v1.ToFloat());
+            return Variant(v0.ToFloat(ud) - v1.ToFloat(ud));
         } else {
-            return Variant(v0.ToInt() - v1.ToInt());
+            return Variant(v0.ToInt(ud) - v1.ToInt(ud));
         }
     }
     case OP_MUL:
@@ -168,27 +168,27 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
         EVAL_V0
         EVAL_V1
         if (v0.type == VarType::Double || v1.type == VarType::Double) {
-            return Variant(v0.ToDouble() * v1.ToDouble());
+            return Variant(v0.ToDouble(ud) * v1.ToDouble(ud));
         } else if (v0.type == VarType::Float || v1.type == VarType::Float) {
-            return Variant(v0.ToFloat() * v1.ToFloat());
+            return Variant(v0.ToFloat(ud) * v1.ToFloat(ud));
         } else {
-            return Variant(v0.ToInt() * v1.ToInt());
+            return Variant(v0.ToInt(ud) * v1.ToInt(ud));
         }
     }
     case OP_DIV:
     {
         EVAL_V0
         EVAL_V1
-        auto d1 = v1.ToDouble();
+        auto d1 = v1.ToDouble(ud);
         if (abs(d1) < std::numeric_limits<double>::epsilon()) {
             return Variant(VarType::Invalid);
         }
         if (v0.type == VarType::Double || v1.type == VarType::Double) {
-            return Variant(v0.ToDouble() / v1.ToDouble());
+            return Variant(v0.ToDouble(ud) / v1.ToDouble(ud));
         } else if (v0.type == VarType::Float || v1.type == VarType::Float) {
-            return Variant(v0.ToFloat() / v1.ToFloat());
+            return Variant(v0.ToFloat(ud) / v1.ToFloat(ud));
         } else {
-            return Variant(v0.ToInt() / v1.ToInt());
+            return Variant(v0.ToInt(ud) / v1.ToInt(ud));
         }
     }
     case OP_MOD:
@@ -247,7 +247,7 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
     case OP_NOT:
     {
         EVAL_V0
-        return Variant(!v0.ToBool());
+        return Variant(!v0.ToBool(ud));
     }
     //case OP_SIZEOF:
     //case OP_INDEX:
@@ -307,7 +307,7 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
         } else if (strcmp(str, "false") == 0) {
             return Variant(false);
         } else {
-            return Variant(VarType::String, expr->val.p);
+            return Variant();
         }
     }
     case OP_CONST:
