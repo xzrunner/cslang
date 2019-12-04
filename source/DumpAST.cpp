@@ -112,7 +112,7 @@ void DumpExpression(std::ostream& output, const ast::ExprNodePtr& expr, int pos)
 	case OP_CAST:
 		output << "(" << opname << " ";
 		pos += strlen(opname) + 2;
-		output << TypeToString(expr->ty);
+		output << TypeToString(*expr->ty);
 		LeftAlign(output, pos);
 		DumpExpression(output, expr->kids[0], pos);
 		output << ")";
@@ -160,10 +160,11 @@ void DumpExpression(std::ostream& output, const ast::ExprNodePtr& expr, int pos)
 
 	case OP_STR:
 		{
-            if (expr->ty.categ == ARRAY && expr->ty.b_categ != CHAR ||
-                expr->ty.categ != ARRAY && expr->ty.b_categ != CHAR) {
-                output << "L";
-            }
+            assert(0);
+            //if (expr->ty->categ == ARRAY && expr->ty.b_categ != CHAR ||
+            //    expr->ty->categ != ARRAY && expr->ty.b_categ != CHAR) {
+            //    output << "L";
+            //}
 			output << "\"";
 
             auto str = (char*)(expr->val.p);
@@ -184,7 +185,7 @@ void DumpExpression(std::ostream& output, const ast::ExprNodePtr& expr, int pos)
 
 	case OP_CONST:
 		{
-			int categ = expr->ty.categ;
+			int categ = expr->ty->categ;
             std::string s;
 			if (categ == INT || categ == LONG || categ == LONGLONG) {
                 s = StringHelper::Format("%d", expr->val.i[0]);

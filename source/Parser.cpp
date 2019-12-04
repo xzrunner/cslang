@@ -58,4 +58,9 @@ void Parser::Expect(const TokenType mask)
     lexer::Parser<TokenType>::Expect(mask, m_curr_token);
 }
 
+bool Parser::IsTypedefName(const std::string& id) const
+{
+    return m_typedef_names.find(id) != m_typedef_names.end();
+}
+
 }

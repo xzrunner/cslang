@@ -25,6 +25,8 @@ public:
 
     void Expect(const TokenType mask);
 
+    bool IsTypedefName(const std::string& id) const;
+
 private:
     virtual std::map<TokenType, std::string> TokenNames() const {
         return std::map<TokenType, std::string>();
@@ -36,6 +38,8 @@ private:
     vexc::Tokenizer m_tokenizer;
 
     lexer::TokenTemplate<TokenType> m_curr_token;
+
+    std::set<std::string> m_typedef_names;
 
 }; // Parser
 

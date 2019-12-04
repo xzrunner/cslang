@@ -13,9 +13,6 @@
     <ClCompile Include="..\..\..\source\DumpAST.cpp">
       <Filter>1.parser</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\Type.cpp">
-      <Filter>2.semantic</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\StringPool.cpp">
       <Filter>util</Filter>
     </ClCompile>
@@ -39,6 +36,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\BuildInFuncs.cpp">
       <Filter>3.eval</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Type.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Symbol.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\ExprCheck.cpp">
+      <Filter>2.semantic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -72,9 +78,6 @@
     <ClInclude Include="..\..\..\include\vexc\DumpAST.h">
       <Filter>1.parser</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\vexc\Type.h">
-      <Filter>2.semantic</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\vexc\StringPool.h">
       <Filter>util</Filter>
     </ClInclude>
@@ -99,6 +102,15 @@
     <ClInclude Include="..\..\..\include\vexc\BuildInFuncs.h">
       <Filter>3.eval</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\Type.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\Symbol.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\vexc\ExprCheck.h">
+      <Filter>2.semantic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="util">
@@ -118,6 +130,9 @@
     </Filter>
     <Filter Include="1.parser\ast">
       <UniqueIdentifier>{f97c30d1-716a-4c06-800f-cc8e2ead3c2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="base">
+      <UniqueIdentifier>{e299d4b0-8dc2-448d-904b-2d076d33e96c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 namespace vexc
 {
 
@@ -11,6 +13,8 @@ enum
 
 enum { CONST = 0x1, VOLATILE = 0x2 };
 
+enum { I1, U1, I2, U2, I4, U4, F4, F8, V, B };
+
 struct Type
 {
     int categ : 8;
@@ -20,6 +24,32 @@ struct Type
 
     int b_categ : 8;
 };
+
+struct Field
+{
+    int offset;
+    std::string id;
+    int bits;
+    int pos;
+    Type ty;
+    std::shared_ptr<Field> next = nullptr;
+};
+
+struct RecordType : public Type
+{
+    std::string id;
+    Field flds;
+    std::shared_ptr<Field> tail = nullptr;
+    int hasConstFld  : 16;
+    int hasFlexArray : 16;
+
+}; // RecordType
+
+struct EnumType : public Type
+{
+    std::string id;
+
+}; // EnumType
 
 struct Signature
 {
@@ -31,14 +61,16 @@ struct Signature
 struct FunctionType : public Type
 {
     Signature sig;
-};
 
-//#define T(categ) (Types[categ])
+}; // FunctionType
 
-Type Unqual(const Type& ty);
-Type ArrayOf(int len, Type ty);
+#define T(categ) (Types[categ])
 
-char* TypeToString(const Type& ty);
+int TypeCode(const Type& ty);
+const Type* Unqual(const Type& ty);
+std::unique_ptr<Type> ArrayOf(int len, const Type& ty);
+
+std::string TypeToString(const Type& ty);
 
 void SetupTypeSystem(void);
 

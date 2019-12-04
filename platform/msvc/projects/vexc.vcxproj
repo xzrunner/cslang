@@ -16,6 +16,7 @@
     <ClInclude Include="..\..\..\include\vexc\Declaration.h" />
     <ClInclude Include="..\..\..\include\vexc\DumpAST.h" />
     <ClInclude Include="..\..\..\include\vexc\EvalAST.h" />
+    <ClInclude Include="..\..\..\include\vexc\ExprCheck.h" />
     <ClInclude Include="..\..\..\include\vexc\Expression.h" />
     <ClInclude Include="..\..\..\include\vexc\grammer.h" />
     <ClInclude Include="..\..\..\include\vexc\keyword.h" />
@@ -24,6 +25,7 @@
     <ClInclude Include="..\..\..\include\vexc\Statement.h" />
     <ClInclude Include="..\..\..\include\vexc\StringHelper.h" />
     <ClInclude Include="..\..\..\include\vexc\StringPool.h" />
+    <ClInclude Include="..\..\..\include\vexc\Symbol.h" />
     <ClInclude Include="..\..\..\include\vexc\Token.h" />
     <ClInclude Include="..\..\..\include\vexc\token_cfg.h" />
     <ClInclude Include="..\..\..\include\vexc\Tokenizer.h" />
@@ -37,11 +39,13 @@
     <ClCompile Include="..\..\..\source\Declaration.cpp" />
     <ClCompile Include="..\..\..\source\DumpAST.cpp" />
     <ClCompile Include="..\..\..\source\EvalAST.cpp" />
+    <ClCompile Include="..\..\..\source\ExprCheck.cpp" />
     <ClCompile Include="..\..\..\source\Expression.cpp" />
     <ClCompile Include="..\..\..\source\Parser.cpp" />
     <ClCompile Include="..\..\..\source\Statement.cpp" />
     <ClCompile Include="..\..\..\source\StringHelper.cpp" />
     <ClCompile Include="..\..\..\source\StringPool.cpp" />
+    <ClCompile Include="..\..\..\source\Symbol.cpp" />
     <ClCompile Include="..\..\..\source\Tokenizer.cpp" />
     <ClCompile Include="..\..\..\source\Type.cpp" />
     <ClCompile Include="..\..\..\source\Variant.cpp" />

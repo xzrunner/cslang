@@ -24,11 +24,13 @@ enum OP
 struct ExpressionNode;
 using ExprNodePtr = std::shared_ptr<ExpressionNode>;
 
+struct TypeNameNode;
 struct ExpressionNode : public Node
 {
     ExpressionNode(const Tokenizer& lexer, NodeKind kind);
+    ExpressionNode(const TypeNameNode& node);
 
-    Type ty;
+    std::unique_ptr<Type> ty = nullptr;
     int op      : 16;
     int isarray : 1;
     int isfunc  : 1;

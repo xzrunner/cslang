@@ -3,6 +3,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <vadefs.h>
+#include <assert.h>
 
 #define CHAR_SIZE         1
 #define SHORT_SIZE        2
@@ -22,20 +23,20 @@
 namespace
 {
 
-///**
-// * Format a name
-// */
-//char* FormatName(const char *fmt, ...)
-//{
-//	char buf[256];
-//	va_list ap;
-//
-//	va_start(ap, fmt);
-//	vsprintf(buf, fmt, ap);
-//	va_end(ap);
-//
-//	return InternName(buf, strlen(buf));
-//}
+/**
+ * Format a name
+ */
+std::string FormatName(const char *fmt, ...)
+{
+	char buf[256];
+	va_list ap;
+
+	va_start(ap, fmt);
+	vsprintf(buf, fmt, ap);
+	va_end(ap);
+
+    return buf;
+}
 
 }
 
@@ -46,39 +47,59 @@ Type WCharType = Types[WCHAR];
 Type Types[VOID - CHAR + 1];
 
 /**
+ * Although int and long are different types from C language, but from some underlying implementations,
+ * the size and representation of them maybe identical. Actually, the function should be provided by
+ * the target. UCC defines a series of type code:
+ * I1: signed 1 byte       U1: unsigned 1 byte
+ * I2: signed 2 byte       U2: unsigned 2 byte
+ * I4: signed 4 byte       U4: unsigned 4 byte
+ * F4: 4 byte floating     F8: 8 byte floating
+ * V: no type              B: memory block, used for struct/union and array.
+ * The target should provide TypeCode to define the map from type category to type code. And UCC can
+ * add more type codes on demand of different targets.
+ */
+int TypeCode(const Type& ty)
+{
+	static int optypes[] = {I1, U1, I2, U2, I4, U4, I4, U4, I4, U4, I4, F4, F8, F8, U4, V, B, B, B};
+
+	assert(ty.categ != FUNCTION);
+	return optypes[ty.categ];
+}
+
+/**
  * Get a type's unqualified version
  */
-Type Unqual(const Type& ty)
+const Type* Unqual(const Type& ty)
 {
     if (ty.qual) {
 //        ty = ty.bty;
     }
-    return ty;
+    return &ty;
 }
 
 /**
  * Construct an array type, len is the array length.
  */
-Type ArrayOf(int len, Type ty)
+std::unique_ptr<Type> ArrayOf(int len, const Type& ty)
 {
-    Type aty;
+    auto aty = std::make_unique<Type>();
 
-    aty.categ = ARRAY;
-    aty.qual = 0;
-    aty.size = len * ty.size;
-    aty.align = ty.align;
-    aty.b_categ = ty.categ;
+    aty->categ = ARRAY;
+    aty->qual = 0;
+    aty->size = len * ty.size;
+    aty->align = ty.align;
+    aty->b_categ = ty.categ;
 
-    return (Type)aty;
+    return aty;
 }
 
 /**
  * Get the type's user-readable string.
  */
-char* TypeToString(const Type& ty)
+std::string TypeToString(const Type& ty)
 {
-	int qual;
-	char *str;
+	int qual = 0;
+	char *str = nullptr;
 	char *names[] =
 	{
 		"char", "unsigned char", "short", "unsigned short", "int", "unsigned int",
@@ -86,55 +107,57 @@ char* TypeToString(const Type& ty)
 		"long double"
 	};
 
-	//if (ty.qual != 0)
-	//{
-	//	qual = ty.qual;
-	//	ty = Unqual(ty);
+	if (ty.qual != 0)
+	{
+		qual = ty.qual;
+		auto _ty = Unqual(ty);
 
-	//	if (qual == CONST)
-	//		str = "const";
-	//	else if (qual == VOLATILE)
-	//		str = "volatile";
-	//	else
-	//		str = "const volatile";
+		if (qual == CONST)
+			str = "const";
+		else if (qual == VOLATILE)
+			str = "volatile";
+		else
+			str = "const volatile";
 
-	//	return FormatName("%s %s", str, TypeToString(ty));
-	//}
+		return FormatName("%s %s", str, TypeToString(*_ty));
+	}
 
 	if (ty.categ >= CHAR && ty.categ <= LONGDOUBLE && ty.categ != ENUM)
 		return names[ty.categ];
 
-	//switch (ty.categ)
-	//{
-	//case ENUM:
-	//	return FormatName("enum %s", ((EnumType)ty)->id);
+	switch (ty.categ)
+	{
+	case ENUM:
+		return FormatName("enum %s", static_cast<const EnumType&>(ty).id.c_str());
 
-	//case POINTER:
-	//	return FormatName("%s *", TypeToString(ty.bty));
+	case POINTER:
+		//return FormatName("%s *", TypeToString(ty.bty));
+        assert(0);
+        return nullptr;
 
-	//case UNION:
-	//	return FormatName("union %s", ((RecordType)ty)->id);
+	case UNION:
+		return FormatName("union %s", static_cast<const RecordType&>(ty).id.c_str());
 
-	//case STRUCT:
-	//	return FormatName("struct %s", ((RecordType)ty)->id);
+	case STRUCT:
+		return FormatName("struct %s", static_cast<const RecordType&>(ty).id.c_str());
 
-	//case ARRAY:
-	//	return FormatName("%s[%d]", TypeToString(ty.bty), ty.size / ty.bty->size);
+	case ARRAY:
+		//return FormatName("%s[%d]", TypeToString(ty.bty), ty.size / ty.bty->size);
+        assert(0);
+        return nullptr;
 
-	//case VOID:
-	//	return "void";
+	case VOID:
+		return "void";
 
-	//case FUNCTION:
-	//	{
-	//		FunctionType fty = (FunctionType)ty;
+	case FUNCTION:
+		//return FormatName("%s ()", TypeToString(fty->bty));
+        assert(0);
+        return nullptr;
 
-	//		return FormatName("%s ()", TypeToString(fty->bty));
-	//	}
-
-	//default:
-	//	assert(0);
-	//	return NULL;
-	//}
+	default:
+		assert(0);
+		return NULL;
+	}
 
     return nullptr;
 }

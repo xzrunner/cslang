@@ -17,6 +17,12 @@ Node::Node(const Tokenizer& lexer, NodeKind kind)
 {
 }
 
+Node::Node(const Coord& coord, NodeKind kind)
+    : kind(kind)
+    , coord(coord)
+{
+}
+
 bool ASTHelper::CurrentTokenIn(int curr_token, int toks[])
 {
     int *p = toks;

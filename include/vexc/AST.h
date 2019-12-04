@@ -39,6 +39,7 @@ struct Coord
 struct Node
 {
     Node(const Tokenizer& lexer, NodeKind kind);
+    Node(const Coord& coord, NodeKind kind);
 
     NodeKind kind = NK_MaxCount;
 

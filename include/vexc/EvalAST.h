@@ -17,7 +17,7 @@ void RegistBuildInFunc(const std::string& name, BuildInFunc func);
 
 using GetterFunc = std::function<Variant(const char*, const void* ud)>;
 void RegistGetter(GetterFunc func);
-using SetterFunc = std::function<void(const char*, Variant, const void* ud)>;
+using SetterFunc = std::function<void(const char*, const char*, Variant, const void* ud)>;
 void RegistSetter(SetterFunc func);
 
 }

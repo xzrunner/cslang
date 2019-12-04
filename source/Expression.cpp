@@ -53,6 +53,11 @@ ExpressionNode::ExpressionNode(const Tokenizer& lexer, NodeKind kind)
 {
 }
 
+ExpressionNode::ExpressionNode(const TypeNameNode& node)
+    : Node(node.coord, node.kind)
+{
+}
+
 /**
  *  expression:
  *      assignment-expression
@@ -147,12 +152,41 @@ ExprNodePtr ExpressionParser::ParsePrimaryExpression(Parser& parser)
             token_type++;
         }
 
-        expr->ty  = Types[INT + token_type - TK_INTCONST];
+        expr->ty  = std::make_unique<Type>(Types[INT + token_type - TK_INTCONST]);
         expr->op  = OP_CONST;
         expr->val = parser.GetTokenizer().GetTokenVal();
         parser.NextToken();
 
         return expr;
+    }
+
+    case TK_INT:
+    case TK_FLOAT:
+    case TK_DOUBLE:
+    {
+        assert(DeclarationParser::IsTypeName(parser.CurrTokenType()));
+
+        auto cast = std::make_shared<ExpressionNode>(parser.GetTokenizer(), NK_Expression);
+        cast->op = OP_CAST;
+        int type = 0;
+        switch (parser.CurrTokenType())
+        {
+
+        case TK_INT:
+            type = INT;
+            break;
+        case TK_FLOAT:
+            type = FLOAT;
+            break;
+        case TK_DOUBLE:
+            type = DOUBLE;
+            break;
+        }
+        cast->ty = std::make_unique<Type>(Types[type]);
+        parser.NextToken();
+        cast->kids[0] = ParseUnaryExpression(parser);
+
+        return cast;
     }
 
 	case TK_STRING:
@@ -325,10 +359,10 @@ ExprNodePtr ExpressionParser::ParseUnaryExpression(Parser& parser)
             auto expr = std::make_shared<ExpressionNode>(parser.GetTokenizer(), NK_Expression);
             expr->op = OP_CAST;
             parser.NextToken();
-//            expr->kids[0] = (AstExpression)ParseTypeName();
+            auto node = DeclarationParser::ParseTypeName(parser);
+            expr->kids[0] = std::make_shared<ExpressionNode>(*node);
             parser.Expect(TK_RPAREN);
             parser.NextToken();
-
             expr->kids[1] = ParseUnaryExpression(parser);
 
             return expr;
@@ -351,7 +385,8 @@ ExprNodePtr ExpressionParser::ParseUnaryExpression(Parser& parser)
             if (DeclarationParser::IsTypeName(t.GetType()))
             {
                 parser.NextToken();
-//                expr->kids[0] = (AstExpression)ParseTypeName();
+                auto node = DeclarationParser::ParseTypeName(parser);
+                expr->kids[0] = std::make_shared<ExpressionNode>(*node);
                 parser.Expect(TK_RPAREN);
                 parser.NextToken();
             }

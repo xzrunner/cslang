@@ -64,12 +64,28 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
     case OP_ASSIGN:
     {
         EVAL_V1
-        if (expr->kids[1]->op == OP_ID && GETTER) {
-            v1 = GETTER((char*)(expr->kids[1]->val.p), ud);
+
+        if (GETTER)
+        {
+            switch (expr->kids[1]->op)
+            {
+            case OP_ID:
+                v1 = GETTER((char*)(expr->kids[1]->val.p), ud);
+                break;
+            }
         }
 
-        if (expr->kids[0]->op == OP_ID && SETTER) {
-            SETTER((char*)(expr->kids[0]->val.p), v1, ud);
+        if (SETTER)
+        {
+            switch (expr->kids[0]->op)
+            {
+            case OP_ID:
+                SETTER((char*)(expr->kids[0]->val.p), nullptr, v1, ud);
+                break;
+            case OP_MEMBER:
+                SETTER((char*)(expr->kids[0]->kids[0]->val.p), (char*)(expr->kids[0]->val.p), v1, ud);
+                break;
+            }
         }
 
         return Variant(v1.ToBool(ud));
@@ -201,7 +217,23 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
             return Variant(VarType::Invalid);
         }
     }
-    //case OP_CAST:
+    case OP_CAST:
+    {
+        EVAL_V0
+        switch (expr->ty->categ)
+        {
+        case INT:
+            return Variant(v0.ToInt(ud));
+        case FLOAT:
+            return Variant(v0.ToInt(ud));
+        case DOUBLE:
+            return Variant(v0.ToDouble(ud));
+        default:
+            assert(0);
+            return Variant();
+        }
+    }
+        break;
     case OP_PREINC:
     {
         EVAL_V0
@@ -312,7 +344,7 @@ Variant EvalExpression(const ExprNodePtr& expr, const void* ud)
     }
     case OP_CONST:
     {
-        int categ = expr->ty.categ;
+        int categ = expr->ty->categ;
         if (categ == CHAR || categ == INT || categ == LONG || categ == LONGLONG) {
             return Variant(expr->val.i[0]);
         } else if (categ == UINT || categ == ULONG || categ == ULONGLONG || categ == POINTER) {
