@@ -55,7 +55,10 @@ void Parser::SkipTo(int toks[])
 
 void Parser::Expect(const TokenType mask)
 {
-    lexer::Parser<TokenType>::Expect(mask, m_curr_token);
+    if (m_curr_token.GetType() != mask) {
+        throw lexer::ParserException(m_curr_token.Line(), m_curr_token.Column(),
+            ExpectString(TokenName(mask), m_curr_token));
+    }
 }
 
 bool Parser::IsTypedefName(const std::string& id) const
