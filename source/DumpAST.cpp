@@ -1,5 +1,5 @@
-#include "vexc/DumpAST.h"
-#include "vexc/StringHelper.h"
+#include "cslang/DumpAST.h"
+#include "cslang/StringHelper.h"
 
 namespace
 {
@@ -16,7 +16,7 @@ void LeftAlign(std::ostream& output, int pos)
 
 }
 
-namespace vexc
+namespace cslang
 {
 
 using namespace ast;

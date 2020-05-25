@@ -1,8 +1,8 @@
-#include "vexc/StringHelper.h"
+#include "cslang/StringHelper.h"
 
 #include <stdarg.h>
 
-namespace vexc
+namespace cslang
 {
 
 std::string StringHelper::Format(const std::string fmt, ...)

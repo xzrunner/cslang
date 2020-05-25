@@ -1,6 +1,6 @@
 #pragma once
 
-namespace vexc
+namespace cslang
 {
 
 typedef unsigned int TokenType;
@@ -9,7 +9,7 @@ enum Token
 {
 	TK_BEGIN = 0,
 #define TOKEN(k, s) k,
-#include "vexc/token_cfg.h"
+#include "cslang/token_cfg.h"
 #undef  TOKEN
 
 }; // Token

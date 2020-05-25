@@ -2,8 +2,11 @@
 
 #include <string>
 
-namespace vexc
+namespace cslang
 {
+
+#undef VOID
+#undef CONST
 
 enum
 {

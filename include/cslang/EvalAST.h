@@ -1,12 +1,12 @@
 #pragma once
 
-#include "vexc/Variant.h"
-#include "vexc/Expression.h"
-#include "vexc/Statement.h"
+#include "cslang/Variant.h"
+#include "cslang/Expression.h"
+#include "cslang/Statement.h"
 
 #include <vector>
 
-namespace vexc
+namespace cslang
 {
 
 Variant EvalExpression(const ast::ExprNodePtr& expr, const void* ud = nullptr);

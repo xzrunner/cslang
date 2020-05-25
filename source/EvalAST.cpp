@@ -1,5 +1,5 @@
-#include "vexc/EvalAST.h"
-#include "vexc/StringPool.h"
+#include "cslang/EvalAST.h"
+#include "cslang/StringPool.h"
 
 #include <vector>
 #include <map>
@@ -19,8 +19,8 @@ if (v1.type == VarType::Invalid) {           \
 namespace
 {
 
-using namespace vexc;
-using namespace vexc::ast;
+using namespace cslang;
+using namespace cslang::ast;
 
 std::map<std::string, BuildInFunc> FUNCS;
 
@@ -50,7 +50,7 @@ Variant EvalBuildInFunc(const ExprNodePtr& expr, const void* ud)
 
 }
 
-namespace vexc
+namespace cslang
 {
 
 using namespace ast;

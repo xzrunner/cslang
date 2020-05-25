@@ -1,9 +1,9 @@
 #include "utility.h"
 
-#include <vexc/Parser.h>
-#include <vexc/Expression.h>
-#include <vexc/DumpAST.h>
-#include <vexc/EvalAST.h>
+#include <cslang/Parser.h>
+#include <cslang/Expression.h>
+#include <cslang/DumpAST.h>
+#include <cslang/EvalAST.h>
 
 #include <catch/catch.hpp>
 
@@ -16,11 +16,11 @@ TEST_CASE("ch")
 ch("../../House_Width")
 )";
 
-    vexc::Parser parser(str);
-    auto expr = vexc::ast::ExpressionParser::ParseExpression(parser);
+    cslang::Parser parser(str);
+    auto expr = cslang::ast::ExpressionParser::ParseExpression(parser);
 
     //std::stringstream ss;
-    //vexc::DumpExpression(ss, expr, 0);
+    //cslang::DumpExpression(ss, expr, 0);
     //std::cout << ss.str() << std::endl;
 }
 
@@ -30,11 +30,11 @@ TEST_CASE("getbbox_min")
 getbbox_min(0).y
 )";
 
-    vexc::Parser parser(str);
-    auto expr = vexc::ast::ExpressionParser::ParseExpression(parser);
+    cslang::Parser parser(str);
+    auto expr = cslang::ast::ExpressionParser::ParseExpression(parser);
 
     //std::stringstream ss;
-    //vexc::DumpExpression(ss, expr, 0);
+    //cslang::DumpExpression(ss, expr, 0);
     //std::cout << ss.str() << std::endl;
 }
 
@@ -44,11 +44,11 @@ TEST_CASE("attr")
 @P.y == getbbox_min(0).y
 )";
 
-    vexc::Parser parser(str);
-    auto expr = vexc::ast::ExpressionParser::ParseExpression(parser);
+    cslang::Parser parser(str);
+    auto expr = cslang::ast::ExpressionParser::ParseExpression(parser);
 
     //std::stringstream ss;
-    //vexc::DumpExpression(ss, expr, 0);
+    //cslang::DumpExpression(ss, expr, 0);
     //std::cout << ss.str() << std::endl;
 }
 
@@ -58,10 +58,10 @@ TEST_CASE("expr")
 $SIZEX == $SIZEY
 )";
 
-    vexc::Parser parser(str);
-    auto expr = vexc::ast::ExpressionParser::ParseExpression(parser);
+    cslang::Parser parser(str);
+    auto expr = cslang::ast::ExpressionParser::ParseExpression(parser);
 
     //std::stringstream ss;
-    //vexc::DumpExpression(ss, expr, 0);
+    //cslang::DumpExpression(ss, expr, 0);
     //std::cout << ss.str() << std::endl;
 }

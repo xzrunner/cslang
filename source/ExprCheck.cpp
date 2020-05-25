@@ -1,8 +1,8 @@
-#include "vexc/ExprCheck.h"
-#include "vexc/Type.h"
-#include "vexc/Parser.h"
+#include "cslang/ExprCheck.h"
+#include "cslang/Type.h"
+#include "cslang/Parser.h"
 
-namespace vexc
+namespace cslang
 {
 namespace ast
 {

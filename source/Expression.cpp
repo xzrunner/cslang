@@ -1,12 +1,12 @@
-#include "vexc/Expression.h"
-#include "vexc/Parser.h"
-#include "vexc/Declaration.h"
-#include "vexc/Type.h"
+#include "cslang/Expression.h"
+#include "cslang/Parser.h"
+#include "cslang/Declaration.h"
+#include "cslang/Type.h"
 
 namespace
 {
 
-using namespace vexc::ast;
+using namespace cslang::ast;
 
 struct TokenOp
 {
@@ -17,7 +17,7 @@ struct TokenOp
 struct TokenOp TokenOps[] =
 {
 #define TOKENOP(tok, bop, uop) {bop, uop},
-#include "vexc/token_op_cfg.h"
+#include "cslang/token_op_cfg.h"
 #undef  TOKENOP
 };
 
@@ -28,14 +28,14 @@ struct TokenOp TokenOps[] =
 int Prec[] =
 {
 #define OPINFO(op, prec, name, func, opcode) prec,
-#include "vexc/op_cfg.h"
+#include "cslang/op_cfg.h"
 	0
 #undef OPINFO
 };
 
 }
 
-namespace vexc
+namespace cslang
 {
 namespace ast
 {
@@ -43,7 +43,7 @@ namespace ast
 char* ExpressionParser::OPNames[] =
 {
 #define OPINFO(op, prec, name, func, opcode) name,
-#include "vexc/op_cfg.h"
+#include "cslang/op_cfg.h"
 	NULL
 #undef OPINFO
 };

@@ -1,6 +1,6 @@
 #include "utility.h"
 
-#include <vexc/Tokenizer.h>
+#include <cslang/Tokenizer.h>
 
 #include <catch/catch.hpp>
 
@@ -14,6 +14,6 @@ int main()
 }
 )";
 
-    vexc::Tokenizer tokenizer(str);
+    cslang::Tokenizer tokenizer(str);
 //    test::debug_print(tokenizer);
 }

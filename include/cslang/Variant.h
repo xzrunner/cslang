@@ -1,6 +1,6 @@
 #pragma once
 
-namespace vexc
+namespace cslang
 {
 
 enum class VarType

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "vexc/Token.h"
-#include "vexc/StringPool.h"
+#include "cslang/Token.h"
+#include "cslang/StringPool.h"
 
 #include <lexer/Tokenizer.h>
 
 #include <functional>
 #include <array>
 
-namespace vexc
+namespace cslang
 {
 
 union Value

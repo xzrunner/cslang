@@ -1,12 +1,12 @@
 #pragma once
 
-#include "vexc/AST.h"
-#include "vexc/Type.h"
-#include "vexc/Tokenizer.h"
+#include "cslang/AST.h"
+#include "cslang/Type.h"
+#include "cslang/Tokenizer.h"
 
 #include <array>
 
-namespace vexc
+namespace cslang
 {
 
 class Parser;
@@ -17,7 +17,7 @@ namespace ast
 enum OP
 {
 #define OPINFO(op, prec, name, func, opcode) op,
-#include "vexc/op_cfg.h"
+#include "cslang/op_cfg.h"
 #undef OPINFO
 };
 

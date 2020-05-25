@@ -1,10 +1,10 @@
 #pragma once
 
-#include "vexc/Tokenizer.h"
+#include "cslang/Tokenizer.h"
 
 #include <lexer/Parser.h>
 
-namespace vexc
+namespace cslang
 {
 
 class Parser : public lexer::Parser<TokenType>
@@ -35,7 +35,7 @@ private:
 private:
     typedef Tokenizer::Token Token;
 
-    vexc::Tokenizer m_tokenizer;
+    cslang::Tokenizer m_tokenizer;
 
     lexer::TokenTemplate<TokenType> m_curr_token;
 

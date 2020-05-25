@@ -1,9 +1,9 @@
 #pragma once
 
-#include "vexc/Type.h"
-#include "vexc/Tokenizer.h"
+#include "cslang/Type.h"
+#include "cslang/Tokenizer.h"
 
-namespace vexc
+namespace cslang
 {
 
 struct Symbol

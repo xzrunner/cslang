@@ -1,5 +1,5 @@
-#include "vexc/Tokenizer.h"
-#include "vexc/keyword.h"
+#include "cslang/Tokenizer.h"
+#include "cslang/keyword.h"
 
 #define HIGH_4BIT(v)       ((v) >> (8 * sizeof(int) - 4) & 0x0f)
 #define HIGH_3BIT(v)       ((v) >> (8 * sizeof(int) - 3) & 0x07)
@@ -19,14 +19,14 @@ void AppendSTR(std::string& str, char* tmp, int len, int wide)
 
 }
 
-namespace vexc
+namespace cslang
 {
 
 char* Tokenizer::TokenStrings[] =
 {
     "begin",
 #define TOKEN(k, s) s,
-#include "vexc/token_cfg.h"
+#include "cslang/token_cfg.h"
 #undef  TOKEN
 };
 
@@ -212,7 +212,7 @@ TokenType Tokenizer::ScanBadChar()
 
 TokenType Tokenizer::ScanEOF()
 {
-    return vexc::TK_END;
+    return cslang::TK_END;
 }
 
 TokenType Tokenizer::ScanCharLiteral()

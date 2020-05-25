@@ -1,7 +1,7 @@
-#include "vexc/BuildInFuncs.h"
-#include "vexc/EvalAST.h"
+#include "cslang/BuildInFuncs.h"
+#include "cslang/EvalAST.h"
 
-namespace vexc
+namespace cslang
 {
 
 void SetupBuildInFuncs()

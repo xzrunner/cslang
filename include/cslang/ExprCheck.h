@@ -1,8 +1,8 @@
 #pragma once
 
-#include "vexc/Expression.h"
+#include "cslang/Expression.h"
 
-namespace vexc
+namespace cslang
 {
 
 class Parser;

@@ -1,9 +1,9 @@
-#include "vexc/Variant.h"
+#include "cslang/Variant.h"
 
-#include "vexc/StringPool.h"
-#include "vexc/Parser.h"
-#include "vexc/Expression.h"
-#include "vexc/EvalAST.h"
+#include "cslang/StringPool.h"
+#include "cslang/Parser.h"
+#include "cslang/Expression.h"
+#include "cslang/EvalAST.h"
 
 #include <limits>
 
@@ -12,21 +12,21 @@
 namespace
 {
 
-vexc::Variant eval_string_var(const vexc::Variant& var, const void* ud)
+cslang::Variant eval_string_var(const cslang::Variant& var, const void* ud)
 {
-    if (var.type != vexc::VarType::String) {
-        return vexc::Variant();
+    if (var.type != cslang::VarType::String) {
+        return cslang::Variant();
     }
 
-    std::string str = vexc::StringPool::VoidToString(var.p);
-    vexc::Parser parser(str.c_str());
-    auto expr = vexc::ast::ExpressionParser::ParseExpression(parser);
+    std::string str = cslang::StringPool::VoidToString(var.p);
+    cslang::Parser parser(str.c_str());
+    auto expr = cslang::ast::ExpressionParser::ParseExpression(parser);
     return EvalExpression(expr, ud);
 }
 
 }
 
-namespace vexc
+namespace cslang
 {
 
 Variant::Variant(VarType type)

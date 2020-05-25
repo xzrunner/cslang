@@ -1,6 +1,6 @@
-#include "vexc/StringPool.h"
+#include "cslang/StringPool.h"
 
-namespace vexc
+namespace cslang
 {
 
 const char* StringPool::InsertAndQuery(const char* str, int len)

@@ -11,27 +11,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\vexc\AST.h" />
-    <ClInclude Include="..\..\..\include\vexc\BuildInFuncs.h" />
-    <ClInclude Include="..\..\..\include\vexc\Declaration.h" />
-    <ClInclude Include="..\..\..\include\vexc\DumpAST.h" />
-    <ClInclude Include="..\..\..\include\vexc\EvalAST.h" />
-    <ClInclude Include="..\..\..\include\vexc\ExprCheck.h" />
-    <ClInclude Include="..\..\..\include\vexc\Expression.h" />
-    <ClInclude Include="..\..\..\include\vexc\grammer.h" />
-    <ClInclude Include="..\..\..\include\vexc\keyword.h" />
-    <ClInclude Include="..\..\..\include\vexc\op_cfg.h" />
-    <ClInclude Include="..\..\..\include\vexc\Parser.h" />
-    <ClInclude Include="..\..\..\include\vexc\Statement.h" />
-    <ClInclude Include="..\..\..\include\vexc\StringHelper.h" />
-    <ClInclude Include="..\..\..\include\vexc\StringPool.h" />
-    <ClInclude Include="..\..\..\include\vexc\Symbol.h" />
-    <ClInclude Include="..\..\..\include\vexc\Token.h" />
-    <ClInclude Include="..\..\..\include\vexc\token_cfg.h" />
-    <ClInclude Include="..\..\..\include\vexc\Tokenizer.h" />
-    <ClInclude Include="..\..\..\include\vexc\token_op_cfg.h" />
-    <ClInclude Include="..\..\..\include\vexc\Type.h" />
-    <ClInclude Include="..\..\..\include\vexc\Variant.h" />
+    <ClInclude Include="..\..\..\include\cslang\AST.h" />
+    <ClInclude Include="..\..\..\include\cslang\BuildInFuncs.h" />
+    <ClInclude Include="..\..\..\include\cslang\Declaration.h" />
+    <ClInclude Include="..\..\..\include\cslang\DumpAST.h" />
+    <ClInclude Include="..\..\..\include\cslang\EvalAST.h" />
+    <ClInclude Include="..\..\..\include\cslang\ExprCheck.h" />
+    <ClInclude Include="..\..\..\include\cslang\Expression.h" />
+    <ClInclude Include="..\..\..\include\cslang\grammer.h" />
+    <ClInclude Include="..\..\..\include\cslang\keyword.h" />
+    <ClInclude Include="..\..\..\include\cslang\op_cfg.h" />
+    <ClInclude Include="..\..\..\include\cslang\Parser.h" />
+    <ClInclude Include="..\..\..\include\cslang\Statement.h" />
+    <ClInclude Include="..\..\..\include\cslang\StringHelper.h" />
+    <ClInclude Include="..\..\..\include\cslang\StringPool.h" />
+    <ClInclude Include="..\..\..\include\cslang\Symbol.h" />
+    <ClInclude Include="..\..\..\include\cslang\Token.h" />
+    <ClInclude Include="..\..\..\include\cslang\token_cfg.h" />
+    <ClInclude Include="..\..\..\include\cslang\Tokenizer.h" />
+    <ClInclude Include="..\..\..\include\cslang\token_op_cfg.h" />
+    <ClInclude Include="..\..\..\include\cslang\Type.h" />
+    <ClInclude Include="..\..\..\include\cslang\Variant.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\AST.cpp" />
@@ -51,9 +51,9 @@
     <ClCompile Include="..\..\..\source\Variant.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>1.vexc</ProjectName>
+    <ProjectName>1.cslang</ProjectName>
     <ProjectGuid>{7BAD2F78-E25A-481E-87BD-D10CE3FC7586}</ProjectGuid>
-    <RootNamespace>vexc</RootNamespace>
+    <RootNamespace>cslang</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -83,12 +83,12 @@
     <_ProjectFileVersion>15.0.26730.12</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\vexc\x86\Debug\</OutDir>
-    <IntDir>..\vexc\x86\Debug\obj\</IntDir>
+    <OutDir>..\cslang\x86\Debug\</OutDir>
+    <IntDir>..\cslang\x86\Debug\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\vexc\x86\Release\</OutDir>
-    <IntDir>..\vexc\x86\Release\obj\</IntDir>
+    <OutDir>..\cslang\x86\Release\</OutDir>
+    <IntDir>..\cslang\x86\Release\obj\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

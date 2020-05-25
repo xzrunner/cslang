@@ -1,10 +1,10 @@
 #pragma once
 
-namespace vexc { class Tokenizer; }
+namespace cslang { class Tokenizer; }
 
 namespace test
 {
 
-void debug_print(vexc::Tokenizer& tk);
+void debug_print(cslang::Tokenizer& tk);
 
 }

@@ -1,4 +1,4 @@
-#include "vexc/type.h"
+#include "cslang/type.h"
 
 #include <stdarg.h>
 #include <stdlib.h>
@@ -40,7 +40,7 @@ std::string FormatName(const char *fmt, ...)
 
 }
 
-namespace vexc
+namespace cslang
 {
 
 Type WCharType = Types[WCHAR];

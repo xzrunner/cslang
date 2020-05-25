@@ -3,7 +3,7 @@
 #include <set>
 #include <string>
 
-namespace vexc
+namespace cslang
 {
 
 class StringPool

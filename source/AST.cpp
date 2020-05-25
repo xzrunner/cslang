@@ -1,8 +1,8 @@
-#include "vexc/AST.h"
-#include "vexc/Tokenizer.h"
-#include "vexc/Declaration.h"
+#include "cslang/AST.h"
+#include "cslang/Tokenizer.h"
+#include "cslang/Declaration.h"
 
-namespace vexc
+namespace cslang
 {
 
 Coord::Coord(const Tokenizer& lexer)

@@ -1,13 +1,13 @@
 #pragma once
 
-#include "vexc/AST.h"
-#include "vexc/Type.h"
-#include "vexc/Symbol.h"
-#include "vexc/Expression.h"
+#include "cslang/AST.h"
+#include "cslang/Type.h"
+#include "cslang/Symbol.h"
+#include "cslang/Expression.h"
 
 #include <vector>
 
-namespace vexc
+namespace cslang
 {
 
 class Parser;

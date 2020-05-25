@@ -1,8 +1,8 @@
-vexc/
-vexc_test/
+cslang/
+cslang-test/
 projects/*
 
-!projects/vexc.vcxproj
-!projects/vexc.vcxproj.filters
-!projects/vexc_test.vcxproj
-!projects/vexc_test.vcxproj.filters
+!projects/cslang.vcxproj
+!projects/cslang.vcxproj.filters
+!projects/cslang-test.vcxproj
+!projects/cslang-test.vcxproj.filters

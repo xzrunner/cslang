@@ -2,7 +2,7 @@
 
 #include <memory>
 
-namespace vexc
+namespace cslang
 {
 
 class Tokenizer;

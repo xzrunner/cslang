@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace vexc
+namespace cslang
 {
 
 class StringHelper

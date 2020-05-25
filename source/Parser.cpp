@@ -1,8 +1,8 @@
-#include "vexc/Parser.h"
-#include "vexc/AST.h"
-#include "vexc/Type.h"
+#include "cslang/Parser.h"
+#include "cslang/AST.h"
+#include "cslang/Type.h"
 
-namespace vexc
+namespace cslang
 {
 
 Parser::Parser(const char* str)

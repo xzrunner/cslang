@@ -1,10 +1,10 @@
-#include "vexc/Declaration.h"
-#include "vexc/Token.h"
-#include "vexc/grammer.h"
-#include "vexc/Parser.h"
-#include "vexc/Token.h"
+#include "cslang/Declaration.h"
+#include "cslang/Token.h"
+#include "cslang/grammer.h"
+#include "cslang/Parser.h"
+#include "cslang/Token.h"
 
-namespace vexc
+namespace cslang
 {
 
 static int FIRST_StructDeclaration[] = { FIRST_DECLARATION, 0 };

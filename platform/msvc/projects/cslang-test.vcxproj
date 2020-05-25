@@ -17,7 +17,7 @@
     <ProjectReference Include="..\..\..\..\lexer\platform\msvc\projects\lexer.vcxproj">
       <Project>{7719a1d1-af73-4e1d-bd99-e9b706195639}</Project>
     </ProjectReference>
-    <ProjectReference Include="vexc.vcxproj">
+    <ProjectReference Include="cslang.vcxproj">
       <Project>{7bad2f78-e25a-481e-87bd-d10ce3fc7586}</Project>
     </ProjectReference>
   </ItemGroup>
@@ -32,9 +32,9 @@
     <ClInclude Include="..\..\..\test\utility.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>1.vexc_test</ProjectName>
+    <ProjectName>1.cslang-test</ProjectName>
     <ProjectGuid>{9403CA3D-444A-4047-ABE8-B4CF293BBB1D}</ProjectGuid>
-    <RootNamespace>vexc_test</RootNamespace>
+    <RootNamespace>cslang-test</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -64,12 +64,12 @@
     <_ProjectFileVersion>15.0.26730.12</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\vexc_test\x86\Debug\</OutDir>
-    <IntDir>..\vexc_test\x86\Debug\obj\</IntDir>
+    <OutDir>..\cslang-test\x86\Debug\</OutDir>
+    <IntDir>..\cslang-test\x86\Debug\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\vexc_test\x86\Release\</OutDir>
-    <IntDir>..\vexc_test\x86\Release\obj\</IntDir>
+    <OutDir>..\cslang-test\x86\Release\</OutDir>
+    <IntDir>..\cslang-test\x86\Release\obj\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

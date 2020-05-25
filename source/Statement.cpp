@@ -1,10 +1,10 @@
-#include "vexc/Statement.h"
-#include "vexc/Parser.h"
-#include "vexc/Declaration.h"
-#include "vexc/AST.h"
-#include "vexc/grammer.h"
+#include "cslang/Statement.h"
+#include "cslang/Parser.h"
+#include "cslang/Declaration.h"
+#include "cslang/AST.h"
+#include "cslang/grammer.h"
 
-namespace vexc
+namespace cslang
 {
 namespace ast
 {

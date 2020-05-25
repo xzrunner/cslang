@@ -1,11 +1,11 @@
 #include "utility.h"
 
-#include <vexc/Tokenizer.h>
+#include <cslang/Tokenizer.h>
 
 namespace test
 {
 
-void debug_print(vexc::Tokenizer& tk)
+void debug_print(cslang::Tokenizer& tk)
 {
     tk.Reset();
 
@@ -13,13 +13,13 @@ void debug_print(vexc::Tokenizer& tk)
     {
         auto token = tk.NextToken();
         auto token_type = token.GetType();
-        if (token_type == vexc::TK_END) {
+        if (token_type == cslang::TK_END) {
             break;
         }
         else {
             printf("%d %10s %10.*s\n",
                 token_type,
-                vexc::Tokenizer::TokenStrings[token_type],
+                cslang::Tokenizer::TokenStrings[token_type],
                 token.End() - token.Begin(), token.Begin());
         }
     }
