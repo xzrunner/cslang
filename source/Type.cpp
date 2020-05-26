@@ -1,4 +1,5 @@
 #include "cslang/type.h"
+#include "cslang/Utility.h"
 
 #include <stdarg.h>
 #include <stdlib.h>
@@ -19,26 +20,6 @@
 #else
 #define WCHAR		ULONG
 #endif
-
-namespace
-{
-
-/**
- * Format a name
- */
-std::string FormatName(const char *fmt, ...)
-{
-	char buf[256];
-	va_list ap;
-
-	va_start(ap, fmt);
-	vsprintf(buf, fmt, ap);
-	va_end(ap);
-
-    return buf;
-}
-
-}
 
 namespace cslang
 {
@@ -123,7 +104,7 @@ std::string TypeToString(const Type& ty)
 		else
 			str = "const volatile";
 
-		return FormatName("%s %s", str, TypeToString(*_ty));
+		return StringFormat("%s %s", str, TypeToString(*_ty));
 	}
 
 	if (ty.categ >= CHAR && ty.categ <= LONGDOUBLE && ty.categ != ENUM)
@@ -132,21 +113,21 @@ std::string TypeToString(const Type& ty)
 	switch (ty.categ)
 	{
 	case ENUM:
-		return FormatName("enum %s", static_cast<const EnumType&>(ty).id.c_str());
+		return StringFormat("enum %s", static_cast<const EnumType&>(ty).id.c_str());
 
 	case POINTER:
-		//return FormatName("%s *", TypeToString(ty.bty));
+		//return StringFormat("%s *", TypeToString(ty.bty));
         assert(0);
         return nullptr;
 
 	case UNION:
-		return FormatName("union %s", static_cast<const RecordType&>(ty).id.c_str());
+		return StringFormat("union %s", static_cast<const RecordType&>(ty).id.c_str());
 
 	case STRUCT:
-		return FormatName("struct %s", static_cast<const RecordType&>(ty).id.c_str());
+		return StringFormat("struct %s", static_cast<const RecordType&>(ty).id.c_str());
 
 	case ARRAY:
-		//return FormatName("%s[%d]", TypeToString(ty.bty), ty.size / ty.bty->size);
+		//return StringFormat("%s[%d]", TypeToString(ty.bty), ty.size / ty.bty->size);
         assert(0);
         return nullptr;
 
@@ -154,7 +135,7 @@ std::string TypeToString(const Type& ty)
 		return "void";
 
 	case FUNCTION:
-		//return FormatName("%s ()", TypeToString(fty->bty));
+		//return StringFormat("%s ()", TypeToString(fty->bty));
         assert(0);
         return nullptr;
 

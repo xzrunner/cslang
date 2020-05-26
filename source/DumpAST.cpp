@@ -1,5 +1,5 @@
 #include "cslang/DumpAST.h"
-#include "cslang/StringHelper.h"
+#include "cslang/Utility.h"
 
 #include <stdarg.h>
 
@@ -14,28 +14,6 @@ void LeftAlign(std::ostream& output, int pos)
 	memset(spaces, ' ', pos);
 	spaces[pos] = '\0';
     output << "\n" << spaces;
-}
-
-std::string StringFormat(const std::string fmt, ...)
-{
-	int size = ((int)fmt.size()) * 2 + 50;   // Use a rubric appropriate for your code
-	std::string str;
-	va_list ap;
-	while (1) {     // Maximum two passes on a POSIX system...
-		str.resize(size);
-		va_start(ap, fmt);
-		int n = vsnprintf((char *)str.data(), size, fmt.c_str(), ap);
-		va_end(ap);
-		if (n > -1 && n < size) {  // Everything worked
-			str.resize(n);
-			return str;
-		}
-		if (n > -1)  // Needed size returned
-			size = n + 1;   // For null char
-		else
-			size *= 2;      // Guess at a larger size (OS specific)
-	}
-	return str;
 }
 
 #define print(out, ...)                   \
@@ -201,9 +179,9 @@ void DumpExpression(std::ostream& output, const ast::ExprNodePtr& expr, int pos)
 			{
                 std::string s;
                 if (isprint(str[i])) {
-                    s = StringHelper::Format("%c", str[i]);
+                    s = StringFormat("%c", str[i]);
                 } else {
-                    s = StringHelper::Format("\\x%x", str[i]);
+                    s = StringFormat("\\x%x", str[i]);
                 }
                 output << s;
 			}
@@ -217,13 +195,13 @@ void DumpExpression(std::ostream& output, const ast::ExprNodePtr& expr, int pos)
 			int categ = expr->ty->categ;
             std::string s;
 			if (categ == INT || categ == LONG || categ == LONGLONG) {
-                s = StringHelper::Format("%d", expr->val.i[0]);
+                s = StringFormat("%d", expr->val.i[0]);
 			} else if (categ == UINT || categ == ULONG || categ == ULONGLONG || categ == POINTER) {
-                s = StringHelper::Format("%u", expr->val.i[0]);
+                s = StringFormat("%u", expr->val.i[0]);
 			} else if (categ == FLOAT) {
-                s = StringHelper::Format("%g", expr->val.f);
+                s = StringFormat("%g", expr->val.f);
 			} else {
-                s = StringHelper::Format("%g", expr->val.d);
+                s = StringFormat("%g", expr->val.d);
             }
             output << s;
 		}

@@ -1,11 +1,11 @@
-#include "cslang/StringHelper.h"
+#include "cslang/Utility.h"
 
 #include <stdarg.h>
 
 namespace cslang
 {
 
-std::string StringHelper::Format(const std::string fmt, ...)
+std::string StringFormat(const std::string fmt, ...)
 {
 	int size = ((int)fmt.size()) * 2 + 50;   // Use a rubric appropriate for your code
 	std::string str;

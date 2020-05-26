@@ -18,12 +18,12 @@
     <ClInclude Include="..\..\..\include\cslang\EvalAST.h" />
     <ClInclude Include="..\..\..\include\cslang\ExprCheck.h" />
     <ClInclude Include="..\..\..\include\cslang\Expression.h" />
+    <ClInclude Include="..\..\..\include\cslang\GenCode.h" />
     <ClInclude Include="..\..\..\include\cslang\grammer.h" />
     <ClInclude Include="..\..\..\include\cslang\keyword.h" />
     <ClInclude Include="..\..\..\include\cslang\op_cfg.h" />
     <ClInclude Include="..\..\..\include\cslang\Parser.h" />
     <ClInclude Include="..\..\..\include\cslang\Statement.h" />
-    <ClInclude Include="..\..\..\include\cslang\StringHelper.h" />
     <ClInclude Include="..\..\..\include\cslang\StringPool.h" />
     <ClInclude Include="..\..\..\include\cslang\Symbol.h" />
     <ClInclude Include="..\..\..\include\cslang\Token.h" />
@@ -33,6 +33,7 @@
     <ClInclude Include="..\..\..\include\cslang\Type.h" />
     <ClInclude Include="..\..\..\include\cslang\predef.h" />
     <ClInclude Include="..\..\..\include\cslang\type_cfg.h" />
+    <ClInclude Include="..\..\..\include\cslang\Utility.h" />
     <ClInclude Include="..\..\..\include\cslang\Variant.h" />
   </ItemGroup>
   <ItemGroup>
@@ -43,13 +44,14 @@
     <ClCompile Include="..\..\..\source\EvalAST.cpp" />
     <ClCompile Include="..\..\..\source\ExprCheck.cpp" />
     <ClCompile Include="..\..\..\source\Expression.cpp" />
+    <ClCompile Include="..\..\..\source\GenCode.cpp" />
     <ClCompile Include="..\..\..\source\Parser.cpp" />
     <ClCompile Include="..\..\..\source\Statement.cpp" />
-    <ClCompile Include="..\..\..\source\StringHelper.cpp" />
     <ClCompile Include="..\..\..\source\StringPool.cpp" />
     <ClCompile Include="..\..\..\source\Symbol.cpp" />
     <ClCompile Include="..\..\..\source\Tokenizer.cpp" />
     <ClCompile Include="..\..\..\source\Type.cpp" />
+    <ClCompile Include="..\..\..\source\Utility.cpp" />
     <ClCompile Include="..\..\..\source\Variant.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

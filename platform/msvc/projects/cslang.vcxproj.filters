@@ -16,9 +16,6 @@
     <ClCompile Include="..\..\..\source\StringPool.cpp">
       <Filter>util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\StringHelper.cpp">
-      <Filter>util</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\Declaration.cpp">
       <Filter>1.parser\ast</Filter>
     </ClCompile>
@@ -45,6 +42,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\ExprCheck.cpp">
       <Filter>2.semantic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\GenCode.cpp">
+      <Filter>1.parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Utility.cpp">
+      <Filter>util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -81,9 +84,6 @@
     <ClInclude Include="..\..\..\include\cslang\StringPool.h">
       <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\cslang\StringHelper.h">
-      <Filter>util</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\cslang\Declaration.h">
       <Filter>1.parser\ast</Filter>
     </ClInclude>
@@ -116,6 +116,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\cslang\type_cfg.h">
       <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cslang\GenCode.h">
+      <Filter>1.parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cslang\Utility.h">
+      <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
