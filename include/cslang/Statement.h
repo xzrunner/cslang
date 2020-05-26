@@ -1,5 +1,6 @@
 #pragma once
 
+#include "cslang/predef.h"
 #include "cslang/AST.h"
 #include "cslang/Expression.h"
 
@@ -163,7 +164,9 @@ struct CompoundStmtNode : public StatementNode
     CompoundStmtNode(const Tokenizer& lexer, NodeKind kind)
         : StatementNode(lexer, kind) {}
 
+#ifdef FEATURE_DECL_BEFORE_STAT
     NodePtr decls = nullptr;
+#endif // FEATURE_DECL_BEFORE_STAT
     NodePtr stmts = nullptr;
 //    Vector ilocals;
 

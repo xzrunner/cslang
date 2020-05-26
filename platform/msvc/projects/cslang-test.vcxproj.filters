@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\test\main.cpp" />
+    <ClCompile Include="..\..\..\test\utility.cpp" />
+    <ClCompile Include="..\..\..\test\vex_test.cpp">
+      <Filter>vex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\expression_test.cpp">
+      <Filter>c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\tokenizer_test.cpp">
+      <Filter>c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\glsl_test.cpp">
+      <Filter>glsl</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\test\utility.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="vex">
+      <UniqueIdentifier>{6edb4b07-7f02-4312-926d-5e047fbf9a5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="c">
+      <UniqueIdentifier>{9925f9e5-804e-4c66-ae78-c83595915357}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="glsl">
+      <UniqueIdentifier>{b125fac3-b59e-4bfb-8d5f-4cd12bc70b68}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "cslang/predef.h"
+
 namespace cslang
 {
 
@@ -24,6 +26,12 @@ static struct keyword keywordsA[] =
 
 static struct keyword keywordsB[] =
 {
+#ifdef LANG_GLSL
+    {"bool",  4, TK_BOOL},
+    {"bvec2", 5, TK_BOOL2},
+    {"bvec3", 5, TK_BOOL3},
+    {"bvec4", 5, TK_BOOL4},
+#endif // LANG_GLSL
 	{"break", 5, TK_BREAK},
 	{NULL,    0, TK_ID}
 };
@@ -73,9 +81,14 @@ static struct keyword keywordsH[] =
 
 static struct keyword keywordsI[] =
 {
-	{"if",  2, TK_IF},
-	{"int", 3, TK_INT},
-	{NULL,  0, TK_ID}
+	{"if",    2, TK_IF},
+	{"int",   3, TK_INT},
+#ifdef LANG_GLSL
+    {"ivec2", 5, TK_INT2},
+    {"ivec3", 5, TK_INT3},
+    {"ivec4", 5, TK_INT4},
+#endif // LANG_GLSL
+	{NULL,    0, TK_ID}
 };
 
 static struct keyword keywordsJ[] =
@@ -96,7 +109,12 @@ static struct keyword keywordsL[] =
 
 static struct keyword keywordsM[] =
 {
-	{NULL, 0, TK_ID}
+#ifdef LANG_GLSL
+    {"mat2", 4, TK_MATRIX2},
+    {"mat3", 4, TK_MATRIX3},
+    {"mat4", 4, TK_MATRIX4},
+#endif // LANG_GLSL
+	{NULL,   0, TK_ID}
 };
 
 static struct keyword keywordsN[] =
@@ -152,6 +170,11 @@ static struct keyword keywordsU[] =
 
 static struct keyword keywordsV[] =
 {
+#ifdef LANG_GLSL
+    {"vec2",     4, TK_FLOAT2},
+    {"vec3",     4, TK_FLOAT3},
+    {"vec4",     4, TK_FLOAT4},
+#endif // LANG_GLSL
 	{"void",     4, TK_VOID},
 	{"volatile", 8, TK_VOLATILE},
 	{NULL,       0, TK_ID}

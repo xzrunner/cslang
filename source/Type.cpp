@@ -60,7 +60,11 @@ Type Types[VOID - CHAR + 1];
  */
 int TypeCode(const Type& ty)
 {
-	static int optypes[] = {I1, U1, I2, U2, I4, U4, I4, U4, I4, U4, I4, F4, F8, F8, U4, V, B, B, B};
+	static int optypes[] = {
+#define TYPE(type, size, name) size,
+#include "cslang/type_cfg.h"
+#undef TYPE
+    };
 
 	assert(ty.categ != FUNCTION);
 	return optypes[ty.categ];
@@ -102,9 +106,9 @@ std::string TypeToString(const Type& ty)
 	char *str = nullptr;
 	char *names[] =
 	{
-		"char", "unsigned char", "short", "unsigned short", "int", "unsigned int",
-		"long", "unsigned long", "long long", "unsigned long long", "enum", "float", "double",
-		"long double"
+#define TYPE(type, size, name) name,
+#include "cslang/type_cfg.h"
+#undef TYPE
 	};
 
 	if (ty.qual != 0)
@@ -164,9 +168,6 @@ std::string TypeToString(const Type& ty)
 
 void SetupTypeSystem()
 {
-    int i;
-    FunctionType fty;
-
     Types[CHAR].size = Types[UCHAR].size = CHAR_SIZE;
     Types[SHORT].size = Types[USHORT].size = SHORT_SIZE;
     Types[INT].size = Types[UINT].size = INT_SIZE;
@@ -177,12 +178,13 @@ void SetupTypeSystem()
     Types[LONGDOUBLE].size = LONG_DOUBLE_SIZE;
     Types[POINTER].size = INT_SIZE;
 
-    for (i = CHAR; i <= VOID; ++i)
+    for (int i = CHAR; i <= VOID; ++i)
     {
         Types[i].categ = i;
         Types[i].align = Types[i].size;
     }
 
+    //FunctionType fty;
     //ALLOC(fty);
     //fty->categ = FUNCTION;
     //fty->qual = 0;

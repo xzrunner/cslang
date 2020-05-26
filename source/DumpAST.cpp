@@ -1,6 +1,8 @@
 #include "cslang/DumpAST.h"
 #include "cslang/StringHelper.h"
 
+#include <stdarg.h>
+
 namespace
 {
 
@@ -13,6 +15,33 @@ void LeftAlign(std::ostream& output, int pos)
 	spaces[pos] = '\0';
     output << "\n" << spaces;
 }
+
+std::string StringFormat(const std::string fmt, ...)
+{
+	int size = ((int)fmt.size()) * 2 + 50;   // Use a rubric appropriate for your code
+	std::string str;
+	va_list ap;
+	while (1) {     // Maximum two passes on a POSIX system...
+		str.resize(size);
+		va_start(ap, fmt);
+		int n = vsnprintf((char *)str.data(), size, fmt.c_str(), ap);
+		va_end(ap);
+		if (n > -1 && n < size) {  // Everything worked
+			str.resize(n);
+			return str;
+		}
+		if (n > -1)  // Needed size returned
+			size = n + 1;   // For null char
+		else
+			size *= 2;      // Guess at a larger size (OS specific)
+	}
+	return str;
+}
+
+#define print(out, ...)                   \
+    do {                                  \
+        out << StringFormat(__VA_ARGS__); \
+    } while (0)
 
 }
 
@@ -203,6 +232,178 @@ void DumpExpression(std::ostream& output, const ast::ExprNodePtr& expr, int pos)
 	default:
         output << "ERR";
 		break;
+	}
+}
+
+void DumpStatement(std::ostream& output, const ast::StmtNodePtr& stmt, int pos)
+{
+	switch (stmt->kind)
+	{
+	case NK_ExpressionStatement:
+
+		DumpExpression(output, std::static_pointer_cast<ExprStmtNode>(stmt)->expr, pos);
+		break;
+
+	case NK_LabelStatement:
+
+		print(output, "(label %s:\n", std::static_pointer_cast<LabelStmtNode>(stmt)->id);
+		LeftAlign(output, pos + 2);
+		DumpStatement(output, std::static_pointer_cast<LabelStmtNode>(stmt)->stmt, pos + 2);
+		LeftAlign(output, pos);
+		print(output, "end-label)");
+		break;
+
+	case NK_CaseStatement:
+
+		print(output, "(case  ");
+		DumpExpression(output, std::static_pointer_cast<CaseStmtNode>(stmt)->expr, pos + 7);
+		LeftAlign(output, pos + 2);
+		DumpStatement(output, std::static_pointer_cast<CaseStmtNode>(stmt)->stmt, pos + 2);
+		LeftAlign(output, pos);
+		print(output, "end-case)");
+		break;
+
+	case NK_DefaultStatement:
+
+		print(output, "(default  ");
+		DumpStatement(output, std::static_pointer_cast<DefaultStmtNode>(stmt)->stmt, pos + 10);
+		LeftAlign(output, pos);
+		print(output, "end-default)");
+		break;
+
+	case NK_IfStatement:
+
+		print(output, "(if  ");
+		DumpExpression(output, std::static_pointer_cast<IfStmtNode>(stmt)->expr, pos + 5);
+		LeftAlign(output, pos + 2);
+		print(output, "(then  ");
+		LeftAlign(output, pos + 4);
+		DumpStatement(output, std::static_pointer_cast<IfStmtNode>(stmt)->then_stmt, pos + 4);
+		LeftAlign(output, pos + 2);
+		print(output, "end-then)");
+		if (std::static_pointer_cast<IfStmtNode>(stmt)->else_stmt != NULL)
+		{
+			LeftAlign(output, pos + 2);
+			print(output, "(else  ");
+			LeftAlign(output, pos + 4);
+			DumpStatement(output, std::static_pointer_cast<IfStmtNode>(stmt)->else_stmt, pos + 4);
+			LeftAlign(output, pos + 2);
+			print(output, "end-else)");
+		}
+		LeftAlign(output, pos);
+		print(output, "end-if)");
+		break;
+
+	case NK_SwitchStatement:
+
+		print(output, "(switch ");
+		DumpExpression(output, std::static_pointer_cast<SwitchStmtNode>(stmt)->expr, pos + 9);
+		LeftAlign(output, pos + 2);
+		DumpStatement(output, std::static_pointer_cast<SwitchStmtNode>(stmt)->stmt, pos + 2);
+		LeftAlign(output, pos);
+		print(output, "end-switch)");
+		break;
+
+	case NK_WhileStatement:
+
+		print(output, "(while  ");
+		DumpExpression(output, std::static_pointer_cast<LoopStmtNode>(stmt)->expr, pos + 8);
+		LeftAlign(output, pos + 2);
+		DumpStatement(output, std::static_pointer_cast<LoopStmtNode>(stmt)->stmt, pos + 2);
+		LeftAlign(output, pos);
+		print(output, "end-while)");
+		break;
+
+	case NK_DoStatement:
+
+		print(output, "(do  ");
+		DumpExpression(output, std::static_pointer_cast<LoopStmtNode>(stmt)->expr, pos + 5);
+		LeftAlign(output, pos + 2);
+		DumpStatement(output, std::static_pointer_cast<LoopStmtNode>(stmt)->stmt, pos + 2);
+		LeftAlign(output, pos);
+		print(output, ")");
+		break;
+
+	case NK_ForStatement:
+
+		print(output, "(for  ");
+		DumpExpression(output, std::static_pointer_cast<ForStmtNode>(stmt)->init_expr, pos + 6);
+		LeftAlign(output, pos + 6);
+		DumpExpression(output, std::static_pointer_cast<ForStmtNode>(stmt)->expr, pos + 6);
+		LeftAlign(output, pos + 6);
+		DumpExpression(output, std::static_pointer_cast<ForStmtNode>(stmt)->init_expr, pos + 6);
+		LeftAlign(output, pos + 2);
+		DumpStatement(output, std::static_pointer_cast<ForStmtNode>(stmt)->stmt, pos + 2);
+		LeftAlign(output, pos);
+		print(output, "end-for)");
+		break;
+
+	case NK_GotoStatement:
+
+		print(output, "(goto %s)", std::static_pointer_cast<GotoStmtNode>(stmt)->id);
+		break;
+
+	case NK_ContinueStatement:
+
+		print(output, "(continue)");
+		break;
+
+	case NK_BreakStatement:
+
+		print(output, "(break)");
+		break;
+
+	case NK_ReturnStatement:
+
+		print(output, "(ret ");
+		DumpExpression(output, std::static_pointer_cast<ReturnStmtNode>(stmt)->expr, pos + 5);
+		print(output, ")");
+		break;
+
+	case NK_CompoundStatement:
+		{
+			auto p = std::static_pointer_cast<CompoundStmtNode>(stmt)->stmts;
+
+			print(output, "{");
+			while (p != NULL)
+			{
+				LeftAlign(output, pos + 2);
+				DumpStatement(output, std::static_pointer_cast<StatementNode>(p), pos + 2);
+				if (p->next != NULL)
+					print(output, "\n");
+				p = p->next;
+			}
+			LeftAlign(output, pos);
+			print(output, "}");
+			break;
+		}
+
+	default:
+		assert(0);
+	}
+}
+
+void DumpDeclaration(std::ostream& output, const ast::DeclarationNodePtr& decl, int pos)
+{
+
+}
+
+void DumpFunction(std::ostream& output, const ast::FunctionNodePtr& func)
+{
+    print(output, "function %s\n", func->fdec->dec->id);
+    DumpStatement(output, func->stmt, 0);
+    print(output, "\n\n");
+}
+
+void DumpTranslationUnit(std::ostream& output, const TranslationUnitNodePtr& transUnit)
+{
+	auto p = transUnit->extDecls;
+	while (p)
+	{
+		if (p->kind == NK_Function) {
+			DumpFunction(output, std::static_pointer_cast<FunctionNode>(p));
+		}
+		p = p->next;
 	}
 }
 

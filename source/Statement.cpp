@@ -23,21 +23,24 @@ static int FIRST_Statement[] = { FIRST_STATEMENT, 0};
  */
 StmtNodePtr StatementParser::ParseCompoundStatement(Parser& parser)
 {
-//	Level++;
+    parser.IncreaseLevle();
 
     auto comp_stmt = std::make_shared<CompoundStmtNode>(parser.GetTokenizer(), NK_CompoundStatement);
 
 	parser.NextToken();
-    NodePtr* tail = &comp_stmt->decls;
+    NodePtr* tail = nullptr;
+#ifdef FEATURE_DECL_BEFORE_STAT
+    tail = &comp_stmt->decls;
 	while (ASTHelper::CurrentTokenIn(parser.CurrTokenType(), FIRST_Declaration))
 	{
         if (parser.CurrTokenType() == TK_ID &&
-            !DeclarationParser::IsTypeName(parser.CurrTokenType())) {
+            !parser.IsTypeName(parser.CurrToken())) {
             break;
         }
-//		*tail = ParseDeclaration(parser);
+		*tail = DeclarationParser::ParseDeclaration(parser);
 		tail = &(*tail)->next;
 	}
+#endif // FEATURE_DECL_BEFORE_STAT
 	tail = &comp_stmt->stmts;
 	while (parser.CurrTokenType() != TK_RBRACE && parser.CurrTokenType() != TK_END)
 	{
@@ -52,7 +55,7 @@ StmtNodePtr StatementParser::ParseCompoundStatement(Parser& parser)
     parser.NextToken();
 
     ASTHelper::PostCheckTypedef();
-//	Level--;
+    parser.DecreaseLevle();
 
 	return comp_stmt;
 }

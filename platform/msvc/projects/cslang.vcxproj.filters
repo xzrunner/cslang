@@ -111,6 +111,12 @@
     <ClInclude Include="..\..\..\include\cslang\ExprCheck.h">
       <Filter>2.semantic</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\cslang\predef.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cslang\type_cfg.h">
+      <Filter>base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="util">

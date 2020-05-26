@@ -1,14 +1,58 @@
 #include "cslang/Declaration.h"
+#include "cslang/Expression.h"
 #include "cslang/Token.h"
 #include "cslang/grammer.h"
 #include "cslang/Parser.h"
 #include "cslang/Token.h"
+#include "cslang/predef.h"
+
+namespace
+{
+
+std::vector<cslang::ast::TDName> TypedefNames, OverloadNames;
+
+/**
+ * Get the identifier declared by the declarator dec
+ */
+char* GetOutermostID(const cslang::ast::DeclaratorNodePtr& dec)
+{
+    if (dec->kind == cslang::NK_NameDeclarator)
+        return dec->id;
+
+    return GetOutermostID(dec->dec);
+}
+
+/**
+ * Perform minimum semantic check for each declaration
+ */
+void PreCheckTypedef(cslang::Parser& parser, const cslang::ast::DeclarationNodePtr& decl)
+{
+    cslang::NodePtr p = nullptr;
+	int sclass = 0;
+
+	if (decl->specs->stgClasses != NULL)
+	{
+		sclass = std::static_pointer_cast<cslang::ast::TokenNode>(decl->specs->stgClasses)->token;
+	}
+
+	p = decl->initDecs;
+	while (p != NULL)
+	{
+        auto dec = std::static_pointer_cast<cslang::ast::InitDeclaratorNode>(p)->dec;
+        parser.CheckTypedefName(sclass, GetOutermostID(dec));
+		p = p->next;
+	}
+}
+
+}
 
 namespace cslang
 {
 
-static int FIRST_StructDeclaration[] = { FIRST_DECLARATION, 0 };
-static int FF_StructDeclaration[] = { FIRST_DECLARATION, TK_RBRACE, 0 };
+int FIRST_StructDeclaration[]   = { FIRST_DECLARATION, 0 };
+int FF_StructDeclaration[]      = { FIRST_DECLARATION, TK_RBRACE, 0 };
+int FIRST_Function[]            = { FIRST_DECLARATION, TK_LBRACE, 0};
+int FIRST_ExternalDeclaration[] = { FIRST_DECLARATION, TK_MUL, TK_LPAREN, 0};
 
 int FIRST_Declaration[] = { FIRST_DECLARATION, 0 };
 
@@ -50,9 +94,37 @@ TypeNameNodePtr DeclarationParser::ParseTypeName(Parser& parser)
 	return type_name;
 }
 
-bool DeclarationParser::IsTypeName(int tok)
+/**
+ *  translation-unit:
+ *		external-declaration
+ *		translation-unit external-declaration
+ */
+TranslationUnitNodePtr DeclarationParser::ParseTranslationUnit(Parser& parser)
 {
-    return /*tok == TK_ID ? IsTypedefName((char*)(parser.GetTokenizer().GetTokenVal().p)) :*/ (tok >= TK_AUTO && tok <= TK_VOID);
+    auto transUnit = std::make_shared<TranslationUnitNode>(parser.GetTokenizer(), NK_TranslationUnit);
+	NodePtr* tail = &transUnit->extDecls;
+
+    // first advance in Parser's ctor
+	//parser.NextToken();
+	while (parser.CurrTokenType() != TK_END)
+	{
+		*tail = ParseExternalDeclaration(parser);
+		tail = &(*tail)->next;
+		//SkipTo(FIRST_ExternalDeclaration, "the beginning of external declaration");
+        parser.SkipTo(FIRST_ExternalDeclaration);
+	}
+
+	return transUnit;
+}
+
+DeclarationNodePtr DeclarationParser::ParseDeclaration(Parser& parser)
+{
+    auto decl = ParseCommonHeader(parser);
+    parser.Expect(TK_SEMICOLON);
+    parser.NextToken();
+    PreCheckTypedef(parser, decl);
+
+    return decl;
 }
 
 /**
@@ -165,6 +237,7 @@ DeclaratorNodePtr DeclarationParser::ParseDeclarator(Parser& parser, int kind)
  *		int
  *		long
  *		float
+ *      vec2
  *		double
  *		signed
  *		unsigned
@@ -220,6 +293,21 @@ next_specifier:
 	case TK_DOUBLE:
 	case TK_SIGNED:
 	case TK_UNSIGNED:
+#ifdef LANG_GLSL
+    case TK_BOOL:
+    case TK_BOOL2:
+    case TK_BOOL3:
+    case TK_BOOL4:
+    case TK_INT2:
+    case TK_INT3:
+    case TK_INT4:
+    case TK_FLOAT2:
+    case TK_FLOAT3:
+    case TK_FLOAT4:
+    case TK_MATRIX2:
+    case TK_MATRIX3:
+    case TK_MATRIX4:
+#endif // LANG_GLSL
     {
         auto tok = std::make_shared<TokenNode>(parser.GetTokenizer(), NK_Token);
         tok->token = parser.CurrTokenType();
@@ -231,16 +319,16 @@ next_specifier:
 		break;
 
 	case TK_ID:
-		if (! seeTy && parser.IsTypedefName((char*)(parser.GetTokenizer().GetTokenVal().p)))
-		{
-            auto tname = std::make_shared<TypedefNameNode>(parser.GetTokenizer(), NK_TypedefName);
-			tname->id = (char*)(parser.GetTokenizer().GetTokenVal().p);
-			*tsTail = tname;
-			tsTail = &tname->next;
-            parser.NextToken();
-			seeTy = 1;
-			break;
-		}
+	if (! seeTy && parser.IsTypedefName((char*)(parser.GetTokenizer().GetTokenVal().p)))
+	{
+        auto tname = std::make_shared<TypedefNameNode>(parser.GetTokenizer(), NK_TypedefName);
+		tname->id = (char*)(parser.GetTokenizer().GetTokenVal().p);
+		*tsTail = tname;
+		tsTail = &tname->next;
+        parser.NextToken();
+		seeTy = 1;
+		break;
+	}
 		return specs;
 
 	case TK_STRUCT:
@@ -323,7 +411,7 @@ lbrace:
 
 	default:
         assert(0);
-		//Error(&TokenCoord, "Expect identifier or { after struct/union");
+		//Error(&TokenCoord, "parser.Expect identifier or { after struct/union");
 		return stSpec;
 	}
 }
@@ -404,7 +492,7 @@ enumerator_list:
 	else
 	{
         assert(0);
-		//Error(&TokenCoord, "Expect identifier or { after enum");
+		//Error(&TokenCoord, "parser.Expect identifier or { after enum");
 	}
 
 	return enumSpec;
@@ -451,7 +539,8 @@ DeclaratorNodePtr DeclarationParser::ParsePostfixDeclarator(Parser& parser, int 
 			funcDec->dec = dec;
 
 			parser.NextToken();
-			if (IsTypeName(parser.CurrTokenType()))
+
+			if (parser.IsTypeName(parser.CurrToken()))
 			{
 				funcDec->paramTyList = ParseParameterTypeList(parser);
 			}
@@ -481,6 +570,65 @@ DeclaratorNodePtr DeclarationParser::ParsePostfixDeclarator(Parser& parser, int 
 			return dec;
 		}
 	}
+}
+
+/**
+ *  initializer:
+ *		assignment-expression
+ *		{ initializer-list }
+ *		{ initializer-list , }
+ *
+ *  initializer-list:
+ *		initializer
+ *		initializer-list, initializer
+ */
+InitializerNodePtr DeclarationParser::ParseInitializer(Parser& parser)
+{
+    NodePtr* tail = nullptr;
+
+    auto init = std::make_shared<InitializerNode>(parser.GetTokenizer(), NK_Initializer);
+	if (parser.CurrTokenType() == TK_LBRACE)
+	{
+		init->lbrace = 1;
+        parser.NextToken();
+		init->initials = ParseInitializer(parser);
+		tail = &init->initials->next;
+		while (parser.CurrTokenType() == TK_COMMA)
+		{
+            parser.NextToken();
+			if (parser.CurrTokenType() == TK_RBRACE)
+				break;
+			*tail = ParseInitializer(parser);
+			tail = &(*tail)->next;
+		}
+		parser.Expect(TK_RBRACE);
+        parser.NextToken();
+	}
+	else
+	{
+		init->lbrace = 0;
+		init->expr = ExpressionParser::ParseAssignmentExpression(parser);
+	}
+
+	return init;
+}
+
+/**
+ *  init-declarator:
+ *		declarator
+ *      declarator = initializer
+ */
+InitDeclaratorNodePtr DeclarationParser::ParseInitDeclarator(Parser& parser)
+{
+	auto initDec = std::make_shared<InitDeclaratorNode>(parser.GetTokenizer(), NK_InitDeclarator);
+	initDec->dec = ParseDeclarator(parser, DEC_CONCRETE);
+	if (parser.CurrTokenType() == TK_ASSIGN)
+	{
+        parser.NextToken();
+		initDec->init = ParseInitializer(parser);
+	}
+
+	return initDec;
 }
 
 /**
@@ -519,7 +667,7 @@ DeclaratorNodePtr DeclarationParser::ParseDirectDeclarator(Parser& parser, int k
 	else if (kind == DEC_CONCRETE)
 	{
         assert(0);
-		//Error(&TokenCoord, "Expect identifier");
+		//Error(&TokenCoord, "parser.Expect identifier");
 	}
 
 	return dec;
@@ -554,7 +702,7 @@ StructDeclarationNodePtr DeclarationParser::ParseStructDeclaration(Parser& parse
 	if (stDecl->specs->tyQuals == NULL && stDecl->specs->tySpecs == NULL)
 	{
         assert(0);
-		//Error(&stDecl->coord, "Expect type specifier or qualifier");
+		//Error(&stDecl->coord, "parser.Expect type specifier or qualifier");
 	}
 
 	// an extension to C89, supports anonymous struct/union member in struct/union
@@ -650,6 +798,138 @@ ParameterDeclarationNodePtr DeclarationParser::ParseParameterDeclaration(Parser&
 	paramDecl->dec   = ParseDeclarator(parser, DEC_ABSTRACT | DEC_CONCRETE);
 
 	return paramDecl;
+}
+
+
+/**
+ *  The function defintion and declaration have some common parts:
+ *	declaration-specifiers [init-declarator-list]
+ *  if we found that the parts followed by a semicolon, then it is a declaration
+ *  or if the init-declarator list is a stand-alone declarator, then it may be
+ *  a function definition.
+ */
+DeclarationNodePtr DeclarationParser::ParseCommonHeader(Parser& parser)
+{
+    NodePtr* tail = nullptr;
+
+    auto decl = std::make_shared<DeclarationNode>(parser.GetTokenizer(), NK_Declaration);
+	decl->specs = ParseDeclarationSpecifiers(parser);
+	if (parser.CurrTokenType() != TK_SEMICOLON)
+	{
+		decl->initDecs = ParseInitDeclarator(parser);
+		tail = &decl->initDecs->next;
+		while (parser.CurrTokenType() == TK_COMMA)
+		{
+			parser.NextToken();
+			*tail = ParseInitDeclarator(parser);
+			tail = &(*tail)->next;
+		}
+	}
+
+	return decl;
+}
+
+/**
+ * If initDec is a legal function declarator, return it
+ */
+FunctionDeclaratorNodePtr DeclarationParser::GetFunctionDeclarator(const InitDeclaratorNodePtr& initDec)
+{
+	DeclaratorNodePtr dec = nullptr;
+
+	if (initDec == NULL || initDec->next != NULL || initDec->init != NULL)
+		return NULL;
+
+	dec = initDec->dec;
+	while (dec && dec->kind != NK_FunctionDeclarator)
+		dec = dec->dec;
+
+	if (dec == NULL || dec->dec->kind != NK_NameDeclarator)
+		return NULL;
+
+	return std::static_pointer_cast<FunctionDeclaratorNode>(dec);
+}
+
+/**
+ *  external-declaration:
+ *		function-definition
+ *		declaration
+ *
+ *  function-definition:
+ *		declaration-specifiers declarator [declaration-list] compound-statement
+ *
+ *  declaration:
+ *		declaration-specifiers [init-declarator-list] ;
+ *
+ *  declaration-list:
+ *		declaration
+ *		declaration-list declaration
+ */
+NodePtr DeclarationParser::ParseExternalDeclaration(Parser& parser)
+{
+	FunctionDeclaratorNodePtr fdec = nullptr;
+
+    DeclarationNodePtr decl = ParseCommonHeader(parser);
+    InitDeclaratorNodePtr initDec = std::static_pointer_cast<InitDeclaratorNode>(decl->initDecs);
+	if (decl->specs->stgClasses != NULL && std::static_pointer_cast<TokenNode>(decl->specs->stgClasses)->token == TK_TYPEDEF)
+		goto not_func;
+
+	fdec = GetFunctionDeclarator(initDec);
+	if (fdec != NULL)
+	{
+		if (parser.CurrTokenType() == TK_SEMICOLON)
+		{
+			parser.NextToken();
+			if (parser.CurrTokenType() != TK_LBRACE)
+				return decl;
+
+			// maybe a common error, function definition follows ;
+			//Error(&decl->coord, "maybe you accidently add the ;");
+            assert(0);
+		}
+		else if (fdec->paramTyList && parser.CurrTokenType() != TK_LBRACE)
+		{
+			// a common error, function declaration loses ;
+			goto not_func;
+		}
+
+        auto func = std::make_shared<FunctionNode>(parser.GetTokenizer(), NK_Function);
+
+		func->coord = decl->coord;
+		func->specs = decl->specs;
+		func->dec = initDec->dec;
+		func->fdec = fdec;
+
+        parser.IncreaseLevle();
+		if (func->fdec->paramTyList)
+		{
+			NodePtr p = func->fdec->paramTyList->paramDecls;
+			while (p)
+			{
+				parser.CheckTypedefName(0, GetOutermostID((std::static_pointer_cast<ParameterDeclarationNode>(p))->dec));
+				p = p->next;
+			}
+		}
+#ifdef FEATURE_DECL_BEFORE_STAT
+        NodePtr* tail = &func->decls;
+		while (CurrentTokenIn(parser.CurrTokenType(), FIRST_Declaration))
+		{
+			*tail = ParseDeclaration(parser);
+			tail = &(*tail)->next;
+		}
+#endif // FEATURE_DECL_BEFORE_STAT
+        parser.DecreaseLevle();
+
+		func->stmt = StatementParser::ParseCompoundStatement(parser);
+
+		return func;
+	}
+
+not_func:
+	parser.Expect(TK_SEMICOLON);
+    parser.NextToken();
+	PreCheckTypedef(parser, decl);
+
+	return decl;
 }
 
 }

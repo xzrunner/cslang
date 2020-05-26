@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cslang/Tokenizer.h"
+#include "cslang/Declaration.h"
 
 #include <lexer/Parser.h>
 
@@ -18,6 +19,7 @@ public:
 
     void NextToken();
     auto CurrTokenType() const { return m_curr_token.GetType(); }
+    auto& CurrToken() const { return m_curr_token; }
 
     lexer::TokenTemplate<TokenType> PeekToken();
 
@@ -25,7 +27,12 @@ public:
 
     void Expect(const TokenType mask);
 
+    void IncreaseLevle() { ++m_level; }
+    void DecreaseLevle() { --m_level; }
     bool IsTypedefName(const std::string& id) const;
+    bool IsTypeName(const lexer::TokenTemplate<TokenType>& token) const;
+    void CheckTypedefName(int sclass, const std::string& id);
+    void PostCheckTypedef();
 
 private:
     virtual std::map<TokenType, std::string> TokenNames() const {
@@ -39,7 +46,9 @@ private:
 
     lexer::TokenTemplate<TokenType> m_curr_token;
 
-    std::set<std::string> m_typedef_names;
+    // symbol
+    int m_level = 0;
+    std::vector<ast::TDName> m_typedef_names, m_overload_names;
 
 }; // Parser
 

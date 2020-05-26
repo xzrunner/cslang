@@ -1,9 +1,11 @@
 #pragma once
 
+#include "cslang/predef.h"
 #include "cslang/AST.h"
 #include "cslang/Type.h"
 #include "cslang/Symbol.h"
 #include "cslang/Expression.h"
+#include "cslang/Statement.h"
 
 #include <vector>
 
@@ -17,6 +19,13 @@ namespace ast
 
 enum { DEC_ABSTRACT = 0x01, DEC_CONCRETE = 0x02};
 enum { POINTER_TO, ARRAY_OF, FUNCTION_RETURN };
+
+struct TDName
+{
+    std::string id;
+    int level    = 0;
+    int overload = 0;
+}; // TDName
 
 struct DeclaratorNode;
 struct StructDeclaratorNode : public Node
@@ -158,6 +167,37 @@ struct DeclaratorNode : public Node
 
 using DeclaratorNodePtr = std::shared_ptr<DeclaratorNode>;
 
+struct InitializerNode : public Node
+{
+    InitializerNode(const Tokenizer& lexer, NodeKind kind)
+        : Node(lexer, kind)
+    {
+    }
+
+	int lbrace;
+	//union
+	//{
+		NodePtr initials;
+		ExprNodePtr expr;
+	//};
+	InitData idata;
+};
+
+using InitializerNodePtr = std::shared_ptr<InitializerNode>;
+
+struct InitDeclaratorNode : public Node
+{
+    InitDeclaratorNode(const Tokenizer& lexer, NodeKind kind)
+        : Node(lexer, kind)
+    {
+    }
+
+	DeclaratorNodePtr dec;
+	InitializerNodePtr init;
+};
+
+using InitDeclaratorNodePtr = std::shared_ptr<InitDeclaratorNode>;
+
 struct ParameterDeclarationNode : public Node
 {
     ParameterDeclarationNode(const Tokenizer& lexer, NodeKind kind)
@@ -242,21 +282,64 @@ struct TypeNameNode : public Node
 
 using TypeNameNodePtr = std::shared_ptr<TypeNameNode>;
 
-struct TDName
+struct DeclarationNode : public Node
 {
-	char* id       = nullptr;
-	int   level    = 0;
-	int   overload = 0;
-}; // TDName
+    DeclarationNode(const Tokenizer& lexer, NodeKind kind)
+        : Node(lexer, kind)
+    {
+    }
+
+    SpecifiersNodePtr specs = nullptr;
+    NodePtr initDecs = nullptr;
+};
+
+using DeclarationNodePtr = std::shared_ptr<DeclarationNode>;
+
+struct FunctionNode : public Node
+{
+    FunctionNode(const Tokenizer& lexer, NodeKind kind)
+        : Node(lexer, kind)
+        , labels(lexer)
+    {
+    }
+
+    SpecifiersNodePtr specs = nullptr;
+    DeclaratorNodePtr dec = nullptr;
+    FunctionDeclaratorNodePtr fdec = nullptr;
+#ifdef FEATURE_DECL_BEFORE_STAT
+    NodePtr decls = nullptr;
+#endif // FEATURE_DECL_BEFORE_STAT
+    StmtNodePtr stmt = nullptr;
+    FunctionSymbol fsym;
+    Label labels;
+    //Vector loops;
+    //Vector swtches;
+    //Vector breakable;
+    int hasReturn;
+};
+
+using FunctionNodePtr = std::shared_ptr<FunctionNode>;
+
+struct TranslationUnitNode : public Node
+{
+    TranslationUnitNode(const Tokenizer& lexer, NodeKind kind)
+        : Node(lexer, kind)
+    {
+    }
+
+    NodePtr extDecls = nullptr;
+};
+
+using TranslationUnitNodePtr = std::shared_ptr<TranslationUnitNode>;
 
 class DeclarationParser
 {
 public:
     static TypeNameNodePtr ParseTypeName(Parser& parser);
 
-    //AstDeclaration     ParseDeclaration(void);
+    static TranslationUnitNodePtr ParseTranslationUnit(Parser& parser);
 
-    static bool IsTypeName(int tok);
+    static DeclarationNodePtr ParseDeclaration(Parser& parser);
 
 private:
     static DeclaratorNodePtr ParseDeclarator(Parser& parser, int kind);
@@ -265,11 +348,16 @@ private:
     static EnumeratorNodePtr ParseEnumerator(Parser& parser);
     static EnumSpecifierNodePtr ParseEnumSpecifier(Parser& parser);
     static DeclaratorNodePtr ParsePostfixDeclarator(Parser& parser, int kind);
+    static InitializerNodePtr ParseInitializer(Parser& parser);
+    static InitDeclaratorNodePtr ParseInitDeclarator(Parser& parser);
     static DeclaratorNodePtr ParseDirectDeclarator(Parser& parser, int kind);
     static StructDeclarationNodePtr ParseStructDeclaration(Parser& parser);
     static StructDeclaratorNodePtr ParseStructDeclarator(Parser& parser);
     static ParameterTypeListNodePtr ParseParameterTypeList(Parser& parser);
     static ParameterDeclarationNodePtr ParseParameterDeclaration(Parser& parser);
+    static DeclarationNodePtr ParseCommonHeader(Parser& parser);
+    static FunctionDeclaratorNodePtr GetFunctionDeclarator(const InitDeclaratorNodePtr& initDec);
+    static NodePtr ParseExternalDeclaration(Parser& parser);
 
 }; // DeclarationParser
 

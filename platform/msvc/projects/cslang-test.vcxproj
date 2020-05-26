@@ -23,6 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\test\expression_test.cpp" />
+    <ClCompile Include="..\..\..\test\glsl_test.cpp" />
     <ClCompile Include="..\..\..\test\main.cpp" />
     <ClCompile Include="..\..\..\test\tokenizer_test.cpp" />
     <ClCompile Include="..\..\..\test\utility.cpp" />

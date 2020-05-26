@@ -2,6 +2,7 @@
 #include "cslang/Parser.h"
 #include "cslang/Declaration.h"
 #include "cslang/Type.h"
+#include "cslang/predef.h"
 
 namespace
 {
@@ -146,13 +147,42 @@ ExprNodePtr ExpressionParser::ParsePrimaryExpression(Parser& parser)
 	case TK_DOUBLECONST:
 	case TK_LDOUBLECONST:
     {
-        auto token_type = parser.CurrTokenType();
         auto expr = std::make_shared<ExpressionNode>(parser.GetTokenizer(), NK_Expression);
-        if (token_type >= TK_FLOATCONST) {
-            token_type++;
-        }
 
-        expr->ty  = std::make_unique<Type>(Types[INT + token_type - TK_INTCONST]);
+        int type = 0;
+        switch (parser.CurrTokenType())
+        {
+        case TK_INTCONST:
+            type = INT;
+            break;
+        case TK_UINTCONST:
+            type = UINT;
+            break;
+        case TK_LONGCONST:
+            type = LONG;
+            break;
+        case TK_ULONGCONST:
+            type = ULONG;
+            break;
+        case TK_LLONGCONST:
+            type = LONGLONG;
+            break;
+        case TK_ULLONGCONST:
+            type = ULONGLONG;
+            break;
+        case TK_FLOATCONST:
+            type = FLOAT;
+            break;
+        case TK_DOUBLECONST:
+            type = DOUBLE;
+            break;
+        case TK_LDOUBLECONST:
+            type = LONGDOUBLE;
+            break;
+        default:
+            assert(0);
+        }
+        expr->ty  = std::make_unique<Type>(Types[type]);
         expr->op  = OP_CONST;
         expr->val = parser.GetTokenizer().GetTokenVal();
         parser.NextToken();
@@ -160,20 +190,54 @@ ExprNodePtr ExpressionParser::ParsePrimaryExpression(Parser& parser)
         return expr;
     }
 
+#ifndef FEATURE_DECL_BEFORE_STAT
+    case TK_CHAR:
+    case TK_SHORT:
     case TK_INT:
+    case TK_INT64:
+    case TK_LONG:
     case TK_FLOAT:
     case TK_DOUBLE:
+    case TK_SIGNED:
+    case TK_UNSIGNED:
+#ifdef LANG_GLSL
+    case TK_BOOL:
+    case TK_BOOL2:
+    case TK_BOOL3:
+    case TK_BOOL4:
+    case TK_INT2:
+    case TK_INT3:
+    case TK_INT4:
+    case TK_FLOAT2:
+    case TK_FLOAT3:
+    case TK_FLOAT4:
+    case TK_MATRIX2:
+    case TK_MATRIX3:
+    case TK_MATRIX4:
+#endif // LANG_GLSL
     {
-        assert(DeclarationParser::IsTypeName(parser.CurrTokenType()));
+        assert(parser.IsTypeName(parser.CurrToken()));
 
         auto cast = std::make_shared<ExpressionNode>(parser.GetTokenizer(), NK_Expression);
         cast->op = OP_CAST;
         int type = 0;
         switch (parser.CurrTokenType())
         {
-
+        case TK_CHAR:
+            type = CHAR;
+            break;
+        case TK_SHORT:
+            type = SHORT;
+            break;
         case TK_INT:
             type = INT;
+            break;
+        case TK_INT64:
+            // fixme
+            type = INT;
+            break;
+        case TK_LONG:
+            type = LONG;
             break;
         case TK_FLOAT:
             type = FLOAT;
@@ -181,6 +245,55 @@ ExprNodePtr ExpressionParser::ParsePrimaryExpression(Parser& parser)
         case TK_DOUBLE:
             type = DOUBLE;
             break;
+        case TK_SIGNED:
+            type = INT;
+            break;
+        case TK_UNSIGNED:
+            type = UINT;
+            break;
+#ifdef LANG_GLSL
+        case TK_BOOL:
+            type = BOOL;
+            break;
+        case TK_BOOL2:
+            type = BOOL2;
+            break;
+        case TK_BOOL3:
+            type = BOOL3;
+            break;
+        case TK_BOOL4:
+            type = BOOL4;
+            break;
+        case TK_INT2:
+            type = INT2;
+            break;
+        case TK_INT3:
+            type = INT3;
+            break;
+        case TK_INT4:
+            type = INT4;
+            break;
+        case TK_FLOAT2:
+            type = FLOAT2;
+            break;
+        case TK_FLOAT3:
+            type = FLOAT3;
+            break;
+        case TK_FLOAT4:
+            type = FLOAT4;
+            break;
+        case TK_MATRIX2:
+            type = MATRIX2;
+            break;
+        case TK_MATRIX3:
+            type = MATRIX3;
+            break;
+        case TK_MATRIX4:
+            type = MATRIX4;
+            break;
+        default:
+            assert(0);
+#endif // LANG_GLSL
         }
         cast->ty = std::make_unique<Type>(Types[type]);
         parser.NextToken();
@@ -188,6 +301,7 @@ ExprNodePtr ExpressionParser::ParsePrimaryExpression(Parser& parser)
 
         return cast;
     }
+#endif // FEATURE_DECL_BEFORE_STAT
 
 	case TK_STRING:
 	case TK_WIDESTRING:
@@ -354,7 +468,7 @@ ExprNodePtr ExpressionParser::ParseUnaryExpression(Parser& parser)
 	case TK_LPAREN:
     {
         auto t = parser.PeekToken();
-        if (DeclarationParser::IsTypeName(t.GetType()))
+        if (parser.IsTypeName(t))
         {
             auto expr = std::make_shared<ExpressionNode>(parser.GetTokenizer(), NK_Expression);
             expr->op = OP_CAST;
@@ -382,7 +496,7 @@ ExprNodePtr ExpressionParser::ParseUnaryExpression(Parser& parser)
         if (parser.CurrTokenType() == TK_LPAREN)
         {
             auto t = parser.PeekToken();
-            if (DeclarationParser::IsTypeName(t.GetType()))
+            if (parser.IsTypeName(t))
             {
                 parser.NextToken();
                 auto node = DeclarationParser::ParseTypeName(parser);

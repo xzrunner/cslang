@@ -6,6 +6,7 @@ namespace cslang
 {
 
 class Tokenizer;
+struct ExprNode;
 
 enum NodeKind
 {
@@ -50,6 +51,25 @@ struct Node
 }; // Node
 
 using NodePtr = std::shared_ptr<Node>;
+
+struct Label
+{
+    Label(const Tokenizer& lexer) : coord(lexer) {}
+
+    Coord coord;
+    char *id;
+    int ref;
+    int defined;
+    //BBlock respBB;
+    Label *next;
+};
+
+struct InitData
+{
+    int offset;
+    std::shared_ptr<ExprNode> expr = nullptr;
+    std::shared_ptr<InitData> next = nullptr;
+};
 
 class ASTHelper
 {

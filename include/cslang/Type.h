@@ -1,5 +1,7 @@
 #pragma once
 
+#include "cslang/predef.h"
+
 #include <string>
 
 namespace cslang
@@ -10,8 +12,9 @@ namespace cslang
 
 enum
 {
-	CHAR, UCHAR, SHORT, USHORT, INT, UINT, LONG, ULONG, LONGLONG, ULONGLONG, ENUM,
-	FLOAT, DOUBLE, LONGDOUBLE, POINTER, VOID, UNION, STRUCT, ARRAY, FUNCTION
+#define TYPE(type, size, name) type,
+#include "cslang/type_cfg.h"
+#undef TYPE
 };
 
 enum { CONST = 0x1, VOLATILE = 0x2 };

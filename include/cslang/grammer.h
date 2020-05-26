@@ -1,10 +1,20 @@
 #pragma once
 
-#define FIRST_DECLARATION                                           \
+#include "cslang/predef.h"
+
+#define FIRST_DECLARATION_BASE                                      \
     TK_AUTO,   TK_EXTERN,   TK_REGISTER, TK_STATIC,   TK_TYPEDEF,   \
     TK_CONST,  TK_VOLATILE, TK_SIGNED,   TK_UNSIGNED, TK_SHORT,     \
-    TK_LONG,   TK_CHAR,     TK_INT,      TK_INT64,    TK_FLOAT,	    \
+    TK_LONG,   TK_CHAR,     TK_INT,      TK_INT64,    TK_FLOAT,     \
     TK_DOUBLE, TK_ENUM,     TK_STRUCT,   TK_UNION,    TK_VOID, TK_ID
+
+#ifdef LANG_GLSL
+#define FIRST_DECLARATION FIRST_DECLARATION_BASE,                       \
+    TK_BOOL, TK_BOOL2, TK_BOOL3, TK_BOOL4, TK_INT2, TK_INT3, TK_INT4,   \
+    TK_FLOAT2, TK_FLOAT3, TK_FLOAT4, TK_MATRIX2, TK_MATRIX3, TK_MATRIX4
+#else
+#define FIRST_DECLARATION FIRST_DECLARATION_BASE
+#endif // LANG_GLSL
 
 #define FIRST_EXPRESSION                                                          \
     TK_SIZEOF,       TK_ID,         TK_INTCONST,    TK_UINTCONST,  TK_LONGCONST,  \

@@ -1,3 +1,5 @@
+#include "cslang/predef.h"
+
 #ifndef TOKEN
 #error "You must define TOKEN macro before include this file"
 #endif
@@ -15,10 +17,31 @@ TOKEN(TK_UNSIGNED,  "unsigned")
 TOKEN(TK_SHORT,     "short")
 TOKEN(TK_LONG,      "long")
 TOKEN(TK_CHAR,      "char")
+#ifdef LANG_GLSL
+TOKEN(TK_BOOL,      "bool")
+TOKEN(TK_BOOL2,     "bvec2")
+TOKEN(TK_BOOL3,     "bvec3")
+TOKEN(TK_BOOL4,     "bvec4")
+#endif // LANG_GLSL
 TOKEN(TK_INT,       "int")
+#ifdef LANG_GLSL
+TOKEN(TK_INT2,      "ivec2")
+TOKEN(TK_INT3,      "ivec3")
+TOKEN(TK_INT4,      "ivec4")
+#endif // LANG_GLSL
 TOKEN(TK_INT64,     "__int64")
 TOKEN(TK_FLOAT,     "float")
+#ifdef LANG_GLSL
+TOKEN(TK_FLOAT2,    "vec2")
+TOKEN(TK_FLOAT3,    "vec3")
+TOKEN(TK_FLOAT4,    "vec4")
+#endif // LANG_GLSL
 TOKEN(TK_DOUBLE,    "double")
+#ifdef LANG_GLSL
+TOKEN(TK_MATRIX2,   "mat2")
+TOKEN(TK_MATRIX3,   "mat3")
+TOKEN(TK_MATRIX4,   "mat4")
+#endif // LANG_GLSL
 TOKEN(TK_ENUM,      "enum")
 TOKEN(TK_STRUCT,    "struct")
 TOKEN(TK_UNION,     "union")

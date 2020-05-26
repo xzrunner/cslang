@@ -31,6 +31,8 @@
     <ClInclude Include="..\..\..\include\cslang\Tokenizer.h" />
     <ClInclude Include="..\..\..\include\cslang\token_op_cfg.h" />
     <ClInclude Include="..\..\..\include\cslang\Type.h" />
+    <ClInclude Include="..\..\..\include\cslang\predef.h" />
+    <ClInclude Include="..\..\..\include\cslang\type_cfg.h" />
     <ClInclude Include="..\..\..\include\cslang\Variant.h" />
   </ItemGroup>
   <ItemGroup>

@@ -26,4 +26,41 @@ struct Symbol
 
 }; // Symbol
 
+struct ValueDef
+{
+    Symbol dst;
+    int op;
+    Symbol src1;
+    Symbol src2;
+    //BBlock ownBB;
+    struct valueDef *link;
+};
+
+struct ValueUse
+{
+    ValueDef def;
+    struct valueUse *next;
+};
+
+struct VariableSymbol : public Symbol
+{
+    InitData idata;
+    ValueDef def;
+    ValueUse uses;
+    int offset;
+
+}; // VariableSymbol
+
+struct FunctionSymbol : public Symbol
+{
+	Symbol params;
+	Symbol locals;
+	Symbol *lastv;
+	int nbblock;
+	//BBlock entryBB;
+	//BBlock exitBB;
+	ValueDef valNumTable[16];
+
+}; // FunctionSymbol
+
 }
