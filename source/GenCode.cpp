@@ -348,9 +348,25 @@ void GenStatement(std::ostream& output, const ast::StmtNodePtr& stmt, int pos)
 	}
 }
 
-void GenDeclaration(std::ostream& output, const ast::DeclarationNodePtr& decl, int pos)
+void GenGlobalVariant(std::ostream& output, const ast::DeclarationNodePtr& decl)
 {
+    if (decl->specs->tyQuals)
+    {
+        auto storage = std::static_pointer_cast<ast::TokenNode>(decl->specs->tyQuals)->token;
+        output << Tokenizer::TokenStrings[storage];
 
+        output << " ";
+    }
+
+    auto type = std::static_pointer_cast<ast::TokenNode>(decl->specs->tySpecs)->token;
+    output << Tokenizer::TokenStrings[type];
+
+    output << " ";
+
+    InitDeclaratorNodePtr initDec = std::static_pointer_cast<InitDeclaratorNode>(decl->initDecs);
+    output << initDec->dec->id;
+
+    output << ";\n\n";
 }
 
 void GenFunction(std::ostream& output, const ast::FunctionNodePtr& func)
@@ -389,9 +405,15 @@ void GenTranslationUnit(std::ostream& output, const TranslationUnitNodePtr& tran
 	auto p = transUnit->extDecls;
 	while (p)
 	{
-		if (p->kind == NK_Function) {
-			GenFunction(output, std::static_pointer_cast<FunctionNode>(p));
-		}
+        switch (p->kind)
+        {
+        case NK_Declaration:
+            GenGlobalVariant(output, std::static_pointer_cast<DeclarationNode>(p));
+            break;
+        case NK_Function:
+            GenFunction(output, std::static_pointer_cast<FunctionNode>(p));
+            break;
+        }
 		p = p->next;
 	}
 }

@@ -9,6 +9,32 @@
 #include <sstream>
 #include <iostream>
 
+TEST_CASE("global_var")
+{
+    auto str = R"(
+
+int val;
+uniform vec2 val2;
+
+)";
+
+    cslang::Parser parser(str);
+    auto stat = cslang::ast::DeclarationParser::ParseTranslationUnit(parser);
+
+    std::stringstream ss;
+    cslang::GenTranslationUnit(ss, stat);
+    //std::cout << ss.str() << std::endl;
+
+    REQUIRE(ss.str() == R"(
+int val;
+
+uniform vec2 val2;
+
+)"+1);
+
+    //cslang::GenTranslationUnit(std::cout, stat);
+}
+
 TEST_CASE("ellipse")
 {
     auto str = R"(
@@ -493,6 +519,16 @@ float worley_no_cells(vec2 st, float frequency)
     //std::cout << ss.str() << std::endl;
 
     REQUIRE(ss.str() == R"(
+uniform float u_seed;
+
+uniform int u_dist_op;
+
+uniform int u_features_mode;
+
+uniform float u_manhattan_scale;
+
+uniform vec2 u_poisson_random_offset;
+
 vec2 _random2(vec2 p)
 {
     return fract((sin(vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)))) * 43758.5));
@@ -741,19 +777,24 @@ void test()
 //    float c[100];
 //};
 //
-////struct bar
-////{
-////    foo a, b, c;
-////} a, b, c;
-//
-////void main( )
-////{
-////    bar a, b, c;
-////}
+//struct bar
+//{
+//    foo a, b, c;
+//} a, b, c;
 //
 //void main( )
 //{
-//    foo a;
+//    bar a, b, c;
+//}
+//
+//struct zz
+//{
+//    int i;
+//}
+//
+//void main( )
+//{
+//    zz a;
 //}
 //
 //)";
@@ -765,17 +806,17 @@ void test()
 //    cslang::GenTranslationUnit(ss, stat);
 //    std::cout << ss.str() << std::endl;
 //
-////    REQUIRE(ss.str() == R"(
-////void main()
-////{
-////    float(a) = 0, b = 0, c = 0, d = 0;
-////    float(w) = (a ? a, b : b), c;
-////    float(z) = (a ? (b ? c : d) : w);
-////}
-////
-////)" + 1);
+//    REQUIRE(ss.str() == R"(
+//void main()
+//{
+//    float(a) = 0, b = 0, c = 0, d = 0;
+//    float(w) = (a ? a, b : b), c;
+//    float(z) = (a ? (b ? c : d) : w);
+//}
 //
-//    //cslang::GenTranslationUnit(std::cout, stat);
+//)" + 1);
+//
+//    cslang::GenTranslationUnit(std::cout, stat);
 //}
 
 TEST_CASE("for")
