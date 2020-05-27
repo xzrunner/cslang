@@ -199,9 +199,9 @@ void DumpExpression(std::ostream& output, const ast::ExprNodePtr& expr, int pos)
 			} else if (categ == UINT || categ == ULONG || categ == ULONGLONG || categ == POINTER) {
                 s = StringFormat("%u", expr->val.i[0]);
 			} else if (categ == FLOAT) {
-                s = StringFormat("%g", expr->val.f);
+                s = PrintFloatConstant(expr->val.f);
 			} else {
-                s = StringFormat("%g", expr->val.d);
+                s = PrintDoubleConstant(expr->val.d);
             }
             output << s;
 		}
@@ -309,7 +309,7 @@ void DumpStatement(std::ostream& output, const ast::StmtNodePtr& stmt, int pos)
 		LeftAlign(output, pos + 6);
 		DumpExpression(output, std::static_pointer_cast<ForStmtNode>(stmt)->expr, pos + 6);
 		LeftAlign(output, pos + 6);
-		DumpExpression(output, std::static_pointer_cast<ForStmtNode>(stmt)->init_expr, pos + 6);
+		DumpExpression(output, std::static_pointer_cast<ForStmtNode>(stmt)->incr_expr, pos + 6);
 		LeftAlign(output, pos + 2);
 		DumpStatement(output, std::static_pointer_cast<ForStmtNode>(stmt)->stmt, pos + 2);
 		LeftAlign(output, pos);

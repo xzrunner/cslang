@@ -197,7 +197,13 @@ DeclaratorNodePtr DeclarationParser::ParseDeclarator(Parser& parser, int kind)
 
         parser.NextToken();
         auto curr_token = parser.CurrTokenType();
+#ifdef LANG_GLSL
+        while (curr_token == TK_CONST || curr_token == TK_VOLATILE
+            || curr_token == TK_IN || curr_token == TK_OUT || curr_token == TK_ATTRIBUTE
+            || curr_token == TK_UNIFORM || curr_token == TK_VARYING)
+#else
 		while (curr_token == TK_CONST || curr_token == TK_VOLATILE)
+#endif // LANG_GLSL
 		{
             auto tok = std::make_shared<TokenNode>(parser.GetTokenizer(), NK_Token);
 			tok->token = curr_token;
@@ -274,6 +280,13 @@ next_specifier:
 
 	case TK_CONST:
 	case TK_VOLATILE:
+#ifdef LANG_GLSL
+    case TK_IN:
+    case TK_OUT:
+    case TK_ATTRIBUTE:
+    case TK_UNIFORM:
+    case TK_VARYING:
+#endif // LANG_GLSL
     {
         auto tok = std::make_shared<TokenNode>(parser.GetTokenizer(), NK_Token);
         tok->token = parser.CurrTokenType();
@@ -301,6 +314,10 @@ next_specifier:
     case TK_INT2:
     case TK_INT3:
     case TK_INT4:
+    case TK_UINT:
+    case TK_UVEC2:
+    case TK_UVEC3:
+    case TK_UVEC4:
     case TK_FLOAT2:
     case TK_FLOAT3:
     case TK_FLOAT4:
@@ -655,11 +672,12 @@ DeclaratorNodePtr DeclarationParser::ParseDirectDeclarator(Parser& parser, int k
     auto dec = std::make_shared<DeclaratorNode>(parser.GetTokenizer(), NK_NameDeclarator);
 	if (parser.CurrTokenType() == TK_ID)
 	{
-		if (kind == DEC_ABSTRACT)
-		{
-            assert(0);
-			//Error(&TokenCoord, "Identifier is not permitted in the abstract declarator");
-		}
+        // fixme
+		//if (kind == DEC_ABSTRACT)
+		//{
+  //          assert(0);
+		//	//Error(&TokenCoord, "Identifier is not permitted in the abstract declarator");
+		//}
 
 		dec->id = (char*)(parser.GetTokenizer().GetTokenVal().p);
 		parser.NextToken();

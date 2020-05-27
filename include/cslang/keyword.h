@@ -20,8 +20,11 @@ static struct keyword keywords_[] =
 
 static struct keyword keywordsA[] =
 {
-	{"auto", 4, TK_AUTO},
-	{NULL,   0, TK_ID}
+#ifdef LANG_GLSL
+    {"attribute", 9, TK_ATTRIBUTE},
+#endif // LANG_GLSL
+	{"auto",      4, TK_AUTO},
+	{NULL,        0, TK_ID}
 };
 
 static struct keyword keywordsB[] =
@@ -82,6 +85,9 @@ static struct keyword keywordsH[] =
 static struct keyword keywordsI[] =
 {
 	{"if",    2, TK_IF},
+#ifdef LANG_GLSL
+    {"in",    2, TK_IN},
+#endif // LANG_GLSL
 	{"int",   3, TK_INT},
 #ifdef LANG_GLSL
     {"ivec2", 5, TK_INT2},
@@ -124,7 +130,10 @@ static struct keyword keywordsN[] =
 
 static struct keyword keywordsO[] =
 {
-	{NULL, 0, TK_ID}
+#ifdef LANG_GLSL
+    {"out", 3, TK_OUT},
+#endif // LANG_GLSL
+	{NULL,  0, TK_ID}
 };
 
 static struct keyword keywordsP[] =
@@ -163,6 +172,13 @@ static struct keyword keywordsT[] =
 
 static struct keyword keywordsU[] =
 {
+#ifdef LANG_GLSL
+    {"uint",     4, TK_UINT},
+    {"uvec2",    5, TK_UVEC2},
+    {"uvec3",    5, TK_UVEC3},
+    {"uvec4",    5, TK_UVEC4},
+    {"uniform",  7, TK_UNIFORM},
+#endif // LANG_GLSL
 	{"union",    5, TK_UNION},
 	{"unsigned", 8, TK_UNSIGNED},
 	{NULL,       0, TK_ID}
@@ -171,6 +187,7 @@ static struct keyword keywordsU[] =
 static struct keyword keywordsV[] =
 {
 #ifdef LANG_GLSL
+    {"varying",  7, TK_VARYING},
     {"vec2",     4, TK_FLOAT2},
     {"vec3",     4, TK_FLOAT3},
     {"vec4",     4, TK_FLOAT4},

@@ -52,7 +52,8 @@ void Tokenizer::SetSkipEol(bool skip_eol)
 lexer::Tokenizer<TokenType>::Token
 Tokenizer::EmitToken()
 {
-    DiscardWhile(Whitespace());
+    //DiscardWhile(Whitespace());
+    SkipWhiteSpace();
 
     size_t start_line = Line();
     size_t start_column = Column();
@@ -854,8 +855,7 @@ TokenType Tokenizer::ScanIntLiteral(const char* start, int len, int base)
 			if (tok < TK_LLONGCONST)
 			{
 				tok = TK_LLONGCONST;
-			}
-		}
+			}}
 	}
 
 	return tok;
@@ -873,6 +873,7 @@ void Tokenizer::SkipWhiteSpace()
 		switch (ch)
 		{
 		case '\n':
+            Advance();
 			//TokenCoord.ppline++;
 			//LINE++;
 			//LINEHEAD = ++CURSOR;

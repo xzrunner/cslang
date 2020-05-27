@@ -19,8 +19,13 @@ TYPE(INT,        I4, "int")
 TYPE(INT2,       B,  "ivec2")
 TYPE(INT3,       B,  "ivec3")
 TYPE(INT4,       B,  "ivec4")
-#endif // LANG_GLSL
+TYPE(UINT,       U4, "uint")
+TYPE(UVEC2,      B,  "uvec2")
+TYPE(UVEC3,      B,  "uvec3")
+TYPE(UVEC4,      B,  "uvec4")
+#else
 TYPE(UINT,       U4, "unsigned int")
+#endif // LANG_GLSL
 TYPE(LONG,       I4, "long")
 TYPE(ULONG,      U4, "unsigned long")
 TYPE(LONGLONG,   I4, "long long")
