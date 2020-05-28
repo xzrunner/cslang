@@ -83,4 +83,6 @@ void SetupTypeSystem(void);
 extern Type WCharType;
 extern Type Types[VOID - CHAR + 1];
 
+#define IsIntegType(ty)    (ty->categ <= ENUM)
+
 }

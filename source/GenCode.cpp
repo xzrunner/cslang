@@ -84,13 +84,18 @@ void GenExpression(std::ostream& output, const ast::ExprNodePtr& expr, int pos)
 	case OP_MUL:
 	case OP_DIV:
 	case OP_MOD:
-	case OP_INDEX:
         output << "(";
 		GenExpression(output, expr->kids[0], pos);
         output << " " << opname << " ";
 		GenExpression(output, expr->kids[1], pos);
         output << ")";
 		break;
+    case OP_INDEX:
+        GenExpression(output, expr->kids[0], pos);
+        output << "[";
+        GenExpression(output, expr->kids[1], pos);
+        output << "]";
+        break;
 
 	case OP_CALL:
     {
