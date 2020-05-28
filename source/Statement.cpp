@@ -44,8 +44,25 @@ StmtNodePtr StatementParser::ParseCompoundStatement(Parser& parser)
 	tail = &comp_stmt->stmts;
 	while (parser.CurrTokenType() != TK_RBRACE && parser.CurrTokenType() != TK_END)
 	{
-		*tail = ParseStatement(parser);
-		tail = &(*tail)->next;
+        if (parser.CurrTokenType() == TK_ID && !parser.IsTypeName(parser.CurrToken()))
+        {
+            *tail = ParseStatement(parser);
+            tail = &(*tail)->next;
+        }
+        else
+        {
+            if (ASTHelper::CurrentTokenIn(parser.CurrTokenType(), FIRST_Declaration))
+            {
+                *tail = DeclarationParser::ParseDeclaration(parser);
+                tail = &(*tail)->next;
+            }
+            else
+            {
+                *tail = ParseStatement(parser);
+                tail = &(*tail)->next;
+            }
+        }
+
         if (parser.CurrTokenType() == TK_RBRACE) {
             break;
         }
