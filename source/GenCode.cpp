@@ -292,8 +292,8 @@ void GenStatement(std::ostream& output, const ast::StmtNodePtr& stmt, int pos)
 	case NK_ForStatement:
 
 		output << "for (";
-		GenExpression(output, std::static_pointer_cast<ForStmtNode>(stmt)->init_expr, pos + 6);
-        output << "; ";
+        GenVariant(output, std::static_pointer_cast<ForStmtNode>(stmt)->init_decl, pos);
+        output << " ";
 		GenExpression(output, std::static_pointer_cast<ForStmtNode>(stmt)->expr, pos + 6);
         output << "; ";
 		GenExpression(output, std::static_pointer_cast<ForStmtNode>(stmt)->incr_expr, pos + 6);

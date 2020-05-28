@@ -305,7 +305,8 @@ void DumpStatement(std::ostream& output, const ast::StmtNodePtr& stmt, int pos)
 	case NK_ForStatement:
 
 		print(output, "(for  ");
-		DumpExpression(output, std::static_pointer_cast<ForStmtNode>(stmt)->init_expr, pos + 6);
+        // todo
+		//DumpExpression(output, std::static_pointer_cast<ForStmtNode>(stmt)->init_expr, pos + 6);
 		LeftAlign(output, pos + 6);
 		DumpExpression(output, std::static_pointer_cast<ForStmtNode>(stmt)->expr, pos + 6);
 		LeftAlign(output, pos + 6);

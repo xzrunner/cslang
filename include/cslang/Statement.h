@@ -109,6 +109,7 @@ struct SwitchStmtNode : public StatementNode
 
 }; // SwitchStmtNode
 
+struct DeclarationNode;
 struct ForStmtNode : public StatementNode
 {
     ForStmtNode(const Tokenizer& lexer, NodeKind kind)
@@ -116,7 +117,8 @@ struct ForStmtNode : public StatementNode
 
     ExprNodePtr expr = nullptr;
     StmtNodePtr stmt = nullptr;
-    ExprNodePtr init_expr = nullptr;
+    std::shared_ptr<DeclarationNode> init_decl = nullptr;
+
     ExprNodePtr incr_expr = nullptr;
 //    BBlock testBB;
 

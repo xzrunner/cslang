@@ -233,10 +233,13 @@ StmtNodePtr StatementParser::ParseForStatement(Parser& parser)
     parser.NextToken();
 	if (parser.CurrTokenType() != TK_SEMICOLON)
 	{
-		for_stmt->init_expr = ExpressionParser::ParseExpression(parser);
+        for_stmt->init_decl = DeclarationParser::ParseDeclaration(parser);
 	}
-	parser.Expect(TK_SEMICOLON);
-    parser.NextToken();
+    else
+    {
+        parser.Expect(TK_SEMICOLON);
+        parser.NextToken();
+    }
 	if (parser.CurrTokenType() != TK_SEMICOLON)
 	{
 		for_stmt->expr = ExpressionParser::ParseExpression(parser);
