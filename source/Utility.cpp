@@ -126,7 +126,7 @@ std::string PrintFloatConstant(float f)
 {
     char format[1024];
     snprintf(format, sizeof format, "%g", f);
-    if (!strchr(format, '.')) {
+    if (!strchr(format, '.') && !strchr(format, 'e')) {
         return StringFormat("%g.0", f);
     } else {
         return StringFormat("%s", format);
@@ -137,7 +137,7 @@ std::string PrintDoubleConstant(double d)
 {
     char format[1024];
     snprintf(format, sizeof format, "%g", d);
-    if (!strchr(format, '.')) {
+    if (!strchr(format, '.') && !strchr(format, 'e')) {
         return StringFormat("%g.0", d);
     } else {
         return StringFormat("%s", format);
