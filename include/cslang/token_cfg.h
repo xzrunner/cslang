@@ -52,6 +52,8 @@ TOKEN(TK_DOUBLE,    "double")
 TOKEN(TK_MATRIX2,   "mat2")
 TOKEN(TK_MATRIX3,   "mat3")
 TOKEN(TK_MATRIX4,   "mat4")
+TOKEN(TK_SAMPLER_2D,   "sampler2D")
+TOKEN(TK_SAMPLER_CUBE, "samplerCube")
 #endif // LANG_GLSL
 TOKEN(TK_ENUM,      "enum")
 TOKEN(TK_STRUCT,    "struct")

@@ -155,13 +155,15 @@ static struct keyword keywordsR[] =
 
 static struct keyword keywordsS[] =
 {
-	{"short",  5, TK_SHORT},
-	{"signed", 6, TK_SIGNED},
-	{"sizeof", 6, TK_SIZEOF},
-	{"static", 6, TK_STATIC},
-	{"struct", 6, TK_STRUCT},
-	{"switch", 6, TK_SWITCH},
-	{NULL,     0, TK_ID}
+    {"sampler2D",    9, TK_SAMPLER_2D},
+    {"samplerCube", 11, TK_SAMPLER_CUBE},
+	{"short",        5, TK_SHORT},
+	{"signed",       6, TK_SIGNED},
+	{"sizeof",       6, TK_SIZEOF},
+	{"static",       6, TK_STATIC},
+	{"struct",       6, TK_STRUCT},
+	{"switch",       6, TK_SWITCH},
+	{NULL,           0, TK_ID}
 };
 
 static struct keyword keywordsT[] =

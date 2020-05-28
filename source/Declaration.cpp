@@ -324,6 +324,8 @@ next_specifier:
     case TK_MATRIX2:
     case TK_MATRIX3:
     case TK_MATRIX4:
+    case TK_SAMPLER_2D:
+    case TK_SAMPLER_CUBE:
 #endif // LANG_GLSL
     {
         auto tok = std::make_shared<TokenNode>(parser.GetTokenizer(), NK_Token);
