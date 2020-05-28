@@ -16,6 +16,9 @@ namespace cslang
 //void GenDeclaration(std::ostream& output,
 //    const ast::DeclarationNodePtr& decl, int pos);
 
+void GenFunction(std::ostream& output,
+    const ast::FunctionNodePtr& func);
+
 void GenTranslationUnit(std::ostream& output,
     const ast::TranslationUnitNodePtr& transUnit);
 
