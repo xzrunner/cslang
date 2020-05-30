@@ -248,9 +248,6 @@ float fmod(float x, float y)
 }
 
 // https://docs.unity3d.com/Packages/com.unity.shadergraph@9.0/manual/Rounded-Polygon-Node.html
-/////////////////////////////////////////////////
-/// @export rounded_polygon
-/////////////////////////////////////////////////
 float rounded_polygon(vec2 uv, float width, float height, float sides, float roundness)
 {
     const float PI = 3.14159265359;
@@ -386,21 +383,10 @@ TEST_CASE("worley_noise")
 {
     auto str = R"(
 
-/// @default 0
 uniform float u_seed;
-
-/// @enum Euclideanm, Manhattan, Chebyshev
-/// @default 0
 uniform int u_dist_op;
-
-/// @enum F1, F2, F1_ADD_F2, F2_SUB_F1, F1_MUL_F2, F1_DIV_F2
-/// @default 0
 uniform int u_features_mode;
-
-/// @region 0.01, 0.5
-/// @default 0.5
 uniform float u_manhattan_scale;
-
 uniform vec2 u_poisson_random_offset;
 
 vec2 _random2(vec2 p)
@@ -425,9 +411,6 @@ float _chebyshev_dist(vec2 diff)
     return max(dx, dy);
 }
 
-/////////////////////////////////////////////////
-/// @export worley_cells
-/////////////////////////////////////////////////
 float worley_cells(vec2 st)
 {
     vec2 i_st = floor(st);
@@ -485,14 +468,6 @@ float worley_cells(vec2 st)
     //return color;
 }
 
-/////////////////////////////////////////////////
-/// @export worley_no_cells
-/// @uniform  u_poisson_random_offset vec2
-/// @function poisson_number          (float)->uint
-/// @function poisson_uniform_0_1     ()->float
-/// @function poisson_morton          (uint, uint)->uint
-/// @function poisson_seeding         (uint)->void
-/////////////////////////////////////////////////
 float worley_no_cells(vec2 st, float frequency)
 {
     uint s = poisson_morton(uint(u_poisson_random_offset.x), uint(u_poisson_random_offset.y));
