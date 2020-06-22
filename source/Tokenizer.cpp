@@ -881,6 +881,13 @@ void Tokenizer::SkipWhiteSpace()
 
 		case '#':
 //			ScanPPLine();
+
+			Advance();
+			while (CurChar() != '\n' && CurChar() != END_OF_FILE)
+			{
+				Advance();
+			}
+
 			break;
 
 		case '/':
