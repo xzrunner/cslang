@@ -200,7 +200,7 @@ DeclaratorNodePtr DeclarationParser::ParseDeclarator(Parser& parser, int kind)
 #ifdef LANG_GLSL
         while (curr_token == TK_CONST || curr_token == TK_VOLATILE
             || curr_token == TK_IN || curr_token == TK_OUT || curr_token == TK_ATTRIBUTE
-            || curr_token == TK_UNIFORM || curr_token == TK_VARYING)
+            || curr_token == TK_UNIFORM || curr_token == TK_VARYING || curr_token == TK_LAYOUT || curr_token == TK_LOCATION)
 #else
 		while (curr_token == TK_CONST || curr_token == TK_VOLATILE)
 #endif // LANG_GLSL
@@ -579,6 +579,12 @@ DeclaratorNodePtr DeclarationParser::ParsePostfixDeclarator(Parser& parser, int 
                         parser.NextToken();
 					}
 				}
+#ifdef LANG_GLSL
+				else if (parser.CurrTokenType() == TK_LAYOUT)
+				{
+					int zz = 0;
+				}
+#endif // LANG_GLSL
 			}
 			parser.Expect(TK_RPAREN);
             parser.NextToken();
@@ -684,6 +690,36 @@ DeclaratorNodePtr DeclarationParser::ParseDirectDeclarator(Parser& parser, int k
 		dec->id = (char*)(parser.GetTokenizer().GetTokenVal().p);
 		parser.NextToken();
 	}
+#ifdef LANG_GLSL
+	else if (parser.CurrTokenType() == TK_LAYOUT)
+	{
+		parser.NextToken();
+		parser.Expect(TK_LPAREN);
+
+		parser.NextToken();
+		parser.Expect(TK_LOCATION);
+
+		parser.NextToken();
+		parser.Expect(TK_ASSIGN);
+
+		parser.NextToken();
+		parser.Expect(TK_INTCONST);
+
+		parser.NextToken();
+		parser.Expect(TK_RPAREN);
+
+		parser.NextToken();
+		parser.Expect(TK_IN);
+
+		parser.NextToken();
+
+		parser.NextToken();
+		parser.Expect(TK_ID);
+		dec->id = (char*)(parser.GetTokenizer().GetTokenVal().p);
+
+		parser.NextToken();
+	}
+#endif // LANG_GLSL
 	else if (kind == DEC_CONCRETE)
 	{
         assert(0);

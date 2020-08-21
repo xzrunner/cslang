@@ -56,6 +56,7 @@ void Parser::SkipTo(int toks[])
 void Parser::Expect(const TokenType mask)
 {
     if (m_curr_token.GetType() != mask) {
+        assert(0);
         throw lexer::ParserException(m_curr_token.Line(), m_curr_token.Column(),
             ExpectString(TokenName(mask), m_curr_token));
     }

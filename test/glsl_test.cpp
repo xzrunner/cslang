@@ -881,3 +881,56 @@ void test()
 
     //cslang::GenTranslationUnit(std::cout, stat);
 }
+
+TEST_CASE("layout")
+{
+    auto str = R"(
+
+#version 330 core
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec3 aNormal;
+layout (location = 2) in vec2 aTexCoords;
+
+)";
+
+    cslang::Parser parser(str);
+    auto stat = cslang::ast::DeclarationParser::ParseTranslationUnit(parser);
+
+    std::stringstream ss;
+    cslang::GenTranslationUnit(ss, stat);
+    std::cout << ss.str() << std::endl;
+
+    REQUIRE(ss.str() == R"(
+aPos;
+aNormal;
+aTexCoords;
+)" + 1);
+
+    //cslang::GenTranslationUnit(std::cout, stat);
+}
+
+TEST_CASE("array size")
+{
+    auto str = R"(
+
+const int NR_LIGHTS = 32;
+//uniform Light lights[NR_LIGHTS];
+uniform vec3 lights[NR_LIGHTS];
+
+)";
+
+    cslang::Parser parser(str);
+    auto stat = cslang::ast::DeclarationParser::ParseTranslationUnit(parser);
+
+    std::stringstream ss;
+    cslang::GenTranslationUnit(ss, stat);
+    std::cout << ss.str() << std::endl;
+
+    REQUIRE(ss.str() == R"(
+aPos;
+aNormal;
+aTexCoords;
+)"+1);
+
+    //cslang::GenTranslationUnit(std::cout, stat);
+}

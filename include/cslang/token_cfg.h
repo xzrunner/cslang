@@ -18,6 +18,8 @@ TOKEN(TK_OUT,       "out")
 TOKEN(TK_ATTRIBUTE, "attribute")
 TOKEN(TK_UNIFORM,   "uniform")
 TOKEN(TK_VARYING,   "varying")
+TOKEN(TK_LAYOUT,    "layout")
+TOKEN(TK_LOCATION,  "location")
 #endif // LANG_GLSL
 TOKEN(TK_SIGNED,    "signed")
 TOKEN(TK_UNSIGNED,  "unsigned")

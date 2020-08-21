@@ -109,8 +109,12 @@ static struct keyword keywordsK[] =
 
 static struct keyword keywordsL[] =
 {
-	{"long", 4,	TK_LONG},
-	{NULL,   0, TK_ID}
+#ifdef LANG_GLSL
+	{"layout",   6, TK_LAYOUT},
+	{"location", 8, TK_LOCATION},
+#endif // LANG_GLSL
+	{"long",     4,	TK_LONG},
+	{NULL,       0, TK_ID}
 };
 
 static struct keyword keywordsM[] =
