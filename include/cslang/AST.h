@@ -1,5 +1,7 @@
 #pragma once
 
+#include "cslang/predef.h"
+
 #include <memory>
 
 namespace cslang
@@ -17,6 +19,10 @@ enum NodeKind
 	NK_StructDeclarator,    NK_PointerDeclarator,  NK_ArrayDeclarator,
 	NK_FunctionDeclarator,  NK_ParameterTypeList,  NK_ParameterDeclaration,
 	NK_NameDeclarator,      NK_InitDeclarator,     NK_Initializer,
+
+#ifdef LANG_GLSL
+    NK_UniformSpecifier,
+#endif // LANG_GLSL
 
 	NK_Expression,
 

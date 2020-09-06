@@ -344,7 +344,7 @@ public:
 private:
     static DeclaratorNodePtr ParseDeclarator(Parser& parser, int kind);
     static SpecifiersNodePtr ParseDeclarationSpecifiers(Parser& parser);
-    static StructSpecifierNodePtr ParseStructOrUnionSpecifier(Parser& parser);
+    static StructSpecifierNodePtr ParseStructOrUnionOrUniformSpecifier(Parser& parser);
     static EnumeratorNodePtr ParseEnumerator(Parser& parser);
     static EnumSpecifierNodePtr ParseEnumSpecifier(Parser& parser);
     static DeclaratorNodePtr ParsePostfixDeclarator(Parser& parser, int kind);

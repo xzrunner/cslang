@@ -284,7 +284,6 @@ next_specifier:
     case TK_IN:
     case TK_OUT:
     case TK_ATTRIBUTE:
-    case TK_UNIFORM:
     case TK_VARYING:
 #endif // LANG_GLSL
     {
@@ -295,6 +294,28 @@ next_specifier:
         parser.NextToken();
     }
 		break;
+
+#ifdef LANG_GLSL
+    case TK_UNIFORM:
+	{
+		auto t = parser.PeekToken();
+		if (parser.IsTypeName(t))
+		{
+			auto tok = std::make_shared<TokenNode>(parser.GetTokenizer(), NK_Token);
+			tok->token = parser.CurrTokenType();
+			*tqTail = tok;
+			tqTail = &tok->next;
+			parser.NextToken();
+		}
+		else // ubo
+		{
+			*tsTail = ParseStructOrUnionOrUniformSpecifier(parser);
+			tsTail = &(*tsTail)->next;
+			seeTy = 1;
+		}
+	}
+		break;
+#endif // LANG_GLSL
 
 	case TK_VOID:
 	case TK_CHAR:
@@ -353,7 +374,7 @@ next_specifier:
 	case TK_STRUCT:
 	case TK_UNION:
 
-		*tsTail = ParseStructOrUnionSpecifier(parser);
+		*tsTail = ParseStructOrUnionOrUniformSpecifier(parser);
 		tsTail = &(*tsTail)->next;
 		seeTy = 1;
 		break;
@@ -384,12 +405,17 @@ next_specifier:
  *      struct-declaration
  *		struct-declaration-list struct-declaration
  */
-StructSpecifierNodePtr DeclarationParser::ParseStructOrUnionSpecifier(Parser& parser)
+StructSpecifierNodePtr DeclarationParser::ParseStructOrUnionOrUniformSpecifier(Parser& parser)
 {
 	auto stSpec = std::make_shared<StructSpecifierNode>(parser.GetTokenizer(), NK_StructSpecifier);
-	if (parser.CurrTokenType() == TK_UNION)
+	switch (parser.CurrTokenType())
 	{
+	case TK_UNION:
 		stSpec->kind = NK_UnionSpecifier;
+		break;
+	case TK_UNIFORM:
+		stSpec->kind = NK_UniformSpecifier;
+		break;
 	}
 
     NodePtr prev = nullptr;
