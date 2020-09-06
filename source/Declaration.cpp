@@ -400,6 +400,9 @@ StructSpecifierNodePtr DeclarationParser::ParseStructOrUnionSpecifier(Parser& pa
 	case TK_ID:
 		stSpec->id = (char*)(parser.GetTokenizer().GetTokenVal().p);
 		parser.NextToken();
+
+		parser.CheckTypedefName(TK_TYPEDEF, stSpec->id);
+
 		if (parser.CurrTokenType() == TK_LBRACE)
 			goto lbrace;
 
