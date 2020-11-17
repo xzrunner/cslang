@@ -200,9 +200,9 @@ void GenExpression(std::ostream& output, const ast::ExprNodePtr& expr, int pos)
 		{
 			int categ = expr->ty->categ;
             std::string s;
-			if (categ == INT || categ == LONG || categ == LONGLONG) {
+			if (categ == CHAR || categ == INT || categ == LONG || categ == LONGLONG) {
                 s = StringFormat("%d", expr->val.i[0]);
-			} else if (categ == UINT || categ == ULONG || categ == ULONGLONG || categ == POINTER) {
+			} else if (categ == UCHAR || categ == UINT || categ == ULONG || categ == ULONGLONG || categ == POINTER) {
                 s = StringFormat("%u", expr->val.i[0]);
 			} else if (categ == FLOAT) {
                 s = PrintFloatConstant(expr->val.f);
