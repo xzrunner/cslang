@@ -1,6 +1,8 @@
 #include "cslang/DumpAST.h"
 #include "cslang/Utility.h"
 
+#include <iostream>
+
 #include <stdarg.h>
 
 namespace

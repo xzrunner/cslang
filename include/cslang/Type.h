@@ -3,6 +3,7 @@
 #include "cslang/predef.h"
 
 #include <string>
+#include <memory>
 
 namespace cslang
 {

@@ -2,6 +2,8 @@
 #include "cslang/Utility.h"
 #include "cslang/Tokenizer.h"
 
+#include <iostream>
+
 #include <stdarg.h>
 
 namespace
