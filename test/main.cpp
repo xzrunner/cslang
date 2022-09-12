@@ -1,5 +1,6 @@
 #define CATCH_CONFIG_RUNNER
-#include <catch/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/catch_session.hpp>
 
 #include <cslang/Type.h>
 #include <cslang/BuildInFuncs.h>

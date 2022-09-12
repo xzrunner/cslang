@@ -5,7 +5,7 @@
 #include <cslang/DumpAST.h>
 #include <cslang/EvalAST.h>
 
-#include <catch/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 #include <sstream>
 #include <iostream>

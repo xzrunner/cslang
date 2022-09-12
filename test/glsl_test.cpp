@@ -4,7 +4,7 @@
 #include <cslang/Statement.h>
 #include <cslang/GenCode.h>
 
-#include <catch/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 #include <sstream>
 #include <iostream>
