@@ -909,28 +909,27 @@ aTexCoords;
     //cslang::GenTranslationUnit(std::cout, stat);
 }
 
-TEST_CASE("array size")
-{
-    auto str = R"(
-
-const int NR_LIGHTS = 32;
-//uniform Light lights[NR_LIGHTS];
-uniform vec3 lights[NR_LIGHTS];
-
-)";
-
-    cslang::Parser parser(str);
-    auto stat = cslang::ast::DeclarationParser::ParseTranslationUnit(parser);
-
-    std::stringstream ss;
-    cslang::GenTranslationUnit(ss, stat);
-    std::cout << ss.str() << std::endl;
-
-    REQUIRE(ss.str() == R"(
-aPos;
-aNormal;
-aTexCoords;
-)"+1);
-
-    //cslang::GenTranslationUnit(std::cout, stat);
-}
+//TEST_CASE("array size")
+//{
+//    auto str = R"(
+//
+//const int NR_LIGHTS = 32;
+////uniform Light lights[NR_LIGHTS];
+//uniform vec3 lights[NR_LIGHTS];
+//
+//)";
+//
+//    cslang::Parser parser(str);
+//    auto stat = cslang::ast::DeclarationParser::ParseTranslationUnit(parser);
+//
+//    std::stringstream ss;
+//    cslang::GenTranslationUnit(ss, stat);
+//    std::cout << ss.str() << std::endl;
+//
+//    REQUIRE(ss.str() == R"(
+//const int NR_LIGHTS = 32;
+//uniform vec3 lights[NR_LIGHTS];
+//)" + 1);
+//
+//    //cslang::GenTranslationUnit(std::cout, stat);
+//}

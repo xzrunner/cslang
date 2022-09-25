@@ -47,6 +47,7 @@ struct Node
 {
     Node(const Tokenizer& lexer, NodeKind kind);
     Node(const Coord& coord, NodeKind kind);
+    virtual ~Node() {}
 
     NodeKind kind = NK_MaxCount;
 

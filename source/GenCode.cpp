@@ -175,23 +175,22 @@ void GenExpression(std::ostream& output, const ast::ExprNodePtr& expr, int pos)
 
 	case OP_STR:
 		{
-            assert(0);
             //if (expr->ty->categ == ARRAY && expr->ty.b_categ != CHAR ||
             //    expr->ty->categ != ARRAY && expr->ty.b_categ != CHAR) {
             //    output << "L";
             //}
 			output << "\"";
 
-            auto str = (char*)(expr->val.p);
+			auto str = (char*)(expr->val.p);
 			for (int i = 0, n = strlen(str); i < n; ++i)
 			{
-                std::string s;
-                if (isprint(str[i])) {
-                    s = StringFormat("%c", str[i]);
-                } else {
-                    s = StringFormat("\\x%x", str[i]);
-                }
-                output << s;
+				std::string s;
+				if (isprint(str[i])) {
+					s = StringFormat("%c", str[i]);
+				} else {
+					s = StringFormat("\\x%x", str[i]);
+				}
+				output << s;
 			}
 
             output << "\"";
