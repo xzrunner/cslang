@@ -6,9 +6,9 @@ namespace cslang
 {
 
 Parser::Parser(const char* str)
-    : m_tokenizer(str)
 {
-    m_curr_token = m_tokenizer.NextToken();
+    m_tokenizer = std::make_shared<Tokenizer>(str);
+    m_curr_token = m_tokenizer->NextToken();
 }
 
 //void Parser::Parse()
@@ -19,13 +19,13 @@ Parser::Parser(const char* str)
 
 void Parser::NextToken()
 {
-    m_curr_token = m_tokenizer.NextToken();
+    m_curr_token = m_tokenizer->NextToken();
 }
 
 lexer::TokenTemplate<TokenType>
 Parser::PeekToken()
 {
-    return m_tokenizer.PeekToken();
+    return m_tokenizer->PeekToken();
 }
 
 void Parser::SkipTo(int toks[])

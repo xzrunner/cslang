@@ -30,6 +30,8 @@ public:
 
     auto& GetTokenVal() const { return m_token_val; }
 
+    const char* AddString(const std::string& str);
+
 protected:
     virtual Token EmitToken() override;
 

@@ -49,6 +49,11 @@ void Tokenizer::SetSkipEol(bool skip_eol)
 {
 }
 
+const char* Tokenizer::AddString(const std::string& str)
+{
+	return m_str_pool.InsertAndQuery(str);
+}
+
 lexer::Tokenizer<TokenType>::Token
 Tokenizer::EmitToken()
 {

@@ -15,7 +15,8 @@ public:
 
 //    void Parse();
 
-    auto& GetTokenizer() const { return m_tokenizer; }
+    auto& GetTokenizer() const { return *m_tokenizer; }
+    auto GetTokenizerPtr() const { return m_tokenizer; }
 
     void NextToken();
     auto CurrTokenType() const { return m_curr_token.GetType(); }
@@ -42,7 +43,7 @@ private:
 private:
     typedef Tokenizer::Token Token;
 
-    cslang::Tokenizer m_tokenizer;
+    std::shared_ptr<cslang::Tokenizer> m_tokenizer = nullptr;
 
     lexer::TokenTemplate<TokenType> m_curr_token;
 
