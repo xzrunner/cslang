@@ -7,14 +7,14 @@
 namespace cslang
 {
 
-//void GenExpression(std::ostream& output,
-//    const ast::ExprNodePtr& expr, int pos);
-//
-//void GenStatement(std::ostream& output,
-//    const ast::StmtNodePtr& stmt, int pos);
-//
-//void GenDeclaration(std::ostream& output,
-//    const ast::DeclarationNodePtr& decl, int pos);
+void GenExpression(std::ostream& output,
+    const ast::ExprNodePtr& expr, int pos);
+
+void GenVariant(std::ostream& output, 
+    const ast::DeclarationNodePtr& decl, int pos);
+
+void GenStatement(std::ostream& output,
+    const ast::StmtNodePtr& stmt, int pos);
 
 void GenFunction(std::ostream& output,
     const ast::FunctionNodePtr& func);
