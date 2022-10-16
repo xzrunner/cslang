@@ -80,7 +80,7 @@ namespace ast
  */
 TypeNameNodePtr DeclarationParser::ParseTypeName(Parser& parser)
 {
-    auto type_name = std::make_shared<TypeNameNode>(parser.GetTokenizer(), NK_Expression);
+    auto type_name = std::make_shared<TypeNameNode>(parser.GetTokenizer(), NK_TypeName);
 
     type_name->specs = ParseDeclarationSpecifiers(parser);
 	if (type_name->specs->stgClasses != NULL)

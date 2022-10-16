@@ -28,7 +28,7 @@ struct TypeNameNode;
 struct ExpressionNode : public Node
 {
     ExpressionNode(const Tokenizer& lexer, NodeKind kind);
-    ExpressionNode(const TypeNameNode& node);
+    ExpressionNode(const Coord& coord, NodeKind kind);
 
     std::unique_ptr<Type> ty = nullptr;
     int op      : 16;
@@ -40,6 +40,9 @@ struct ExpressionNode : public Node
     int unused  : 11;
     std::array<ExprNodePtr, 2> kids;
     union Value val;
+
+    // fixme: for TK_LPAREN and TK_SIZEOF expr, use ty?
+    std::shared_ptr<TypeNameNode> tn_kid = nullptr;
 
 }; // ExpressionNode
 

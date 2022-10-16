@@ -55,8 +55,8 @@ ExpressionNode::ExpressionNode(const Tokenizer& lexer, NodeKind kind)
 {
 }
 
-ExpressionNode::ExpressionNode(const TypeNameNode& node)
-    : Node(node.coord, node.kind)
+ExpressionNode::ExpressionNode(const Coord& coord, NodeKind kind)
+    : Node(coord, kind)
 {
 }
 
@@ -382,19 +382,19 @@ ExprNodePtr ExpressionParser::ParseUnaryExpression(Parser& parser)
     {
         auto t = parser.PeekToken();
         // fixme: vec2(float(x),float(y))
-        //if (parser.IsTypeName(t))
-        //{
-        //    auto expr = std::make_shared<ExpressionNode>(parser.GetTokenizer(), NK_Expression);
-        //    expr->op = OP_CAST;
-        //    parser.NextToken();
-        //    const int type = TokenTypeToSymbolType(parser.CurrTokenType());
-        //    assert(type >= 0);
-        //    expr->ty = std::make_unique<Type>(Types[type]);
-        //    expr->kids[0] = ParseUnaryExpression(parser);
+        if (parser.IsTypeName(t))
+        {
+            auto expr = std::make_shared<ExpressionNode>(parser.GetTokenizer(), NK_Expression);
+            expr->op = OP_CAST;
+            parser.NextToken();
+            const int type = TokenTypeToSymbolType(parser.CurrTokenType());
+            assert(type >= 0);
+            expr->ty = std::make_unique<Type>(Types[type]);
+            expr->kids[0] = ParseUnaryExpression(parser);
 
-        //    return expr;
-        //}
-        //else
+            return expr;
+        }
+        else
         {
             return ParsePostfixExpression(parser);
         }
@@ -412,8 +412,13 @@ ExprNodePtr ExpressionParser::ParseUnaryExpression(Parser& parser)
             if (parser.IsTypeName(t))
             {
                 parser.NextToken();
-                auto node = DeclarationParser::ParseTypeName(parser);
-                expr->kids[0] = std::make_shared<ExpressionNode>(*node);
+
+                TypeNameNodePtr tn_node = DeclarationParser::ParseTypeName(parser);
+                expr->tn_kid = tn_node;
+
+                //auto type = std::static_pointer_cast<cslang::ast::TokenNode>(expr->tn_kid->specs->tySpecs)->token;
+                //expr->ty = std::make_unique<Type>(Types[type]);
+
                 parser.Expect(TK_RPAREN);
                 parser.NextToken();
             }

@@ -140,9 +140,9 @@ void GenExpression(std::ostream& output, const ast::ExprNodePtr& expr, int pos)
 	case OP_SIZEOF:
 		output << "(" << opname << " ";
 		pos += strlen(opname) + 2;
-		if (expr->kids[0]->kind == NK_Expression)
 		{
-			GenExpression(output, expr->kids[0], pos);
+			auto type = std::static_pointer_cast<cslang::ast::TokenNode>(expr->tn_kid->specs->tySpecs)->token;
+			output << "(" << cslang::Tokenizer::TokenStrings[type] << ")";
 		}
         output << ")";
 		break;
@@ -262,13 +262,16 @@ void GenVariant(std::ostream& output, const ast::DeclarationNodePtr& decl, int p
         }
             break;
 
-        //case NK_FunctionDeclarator:
-        //    CheckFunctionDeclarator((AstFunctionDeclarator)dec);
-        //    break;
+        case NK_FunctionDeclarator:
+            //CheckFunctionDeclarator((AstFunctionDeclarator)dec);
+            break;
 
-        //case NK_PointerDeclarator:
-        //    CheckPointerDeclarator((AstPointerDeclarator)dec);
-        //    break;
+        case NK_PointerDeclarator:
+		{
+			auto decl = std::static_pointer_cast<PointerDeclaratorNode>(initDec->dec);
+			output << "*" << decl->dec->id;
+		}
+            break;
 
         default:
             assert(0);
